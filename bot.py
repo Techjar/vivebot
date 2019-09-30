@@ -24,4 +24,7 @@ async def on_ready(): #we out here starting
 #    if match and message.author.id != 598277022787043370 and '?bp' not in message.content.lower():
 #        await message.channel.send("{}, it sounds like the game is displaying on your monitor, but not the headset. If this is the case, may I remind you to read the FAQ before posting such inquiries. It's the first thing there!\n<http://www.vivecraft.org/faq/#troubleshooting>".format(message.author.mention))
 
-bot.run('')
+with open('token.txt') as f:
+    token = f.readline()
+
+bot.run(token)
