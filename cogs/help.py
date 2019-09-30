@@ -1,5 +1,5 @@
 from discord.ext import commands
-from discord.ext.commands import has_permissions, CheckFailure
+from discord.ext.commands import has_permissions
 import discord
 
 class help(commands.Cog):
@@ -12,7 +12,8 @@ class help(commands.Cog):
         """Gets all cogs and commands."""
         try:
             if not cog:
-                embed = discord.Embed(title='Vivebot Help Menu', description='Use `?help <cog>` to find out more!')
+                #botname = self.bot.name
+                embed = discord.Embed(title='President Obama Help Menu', description='Use `?help <cog>` to find out more!')
                 cogs_desc = ''
                 for x in self.bot.cogs:
                     cogs_desc += ('{} - {}'.format(x,self.bot.cogs[x].__doc__)+'\n')
