@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
-#import re #this is for the response thing, uncomment this if you want to enable it
+import re
+import random
 prefix = "?"
 bot = commands.Bot(command_prefix=prefix)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
@@ -14,6 +15,15 @@ async def on_ready(): #we out here starting
     print(bot.user.name)
     print(bot.user.id)
     print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
+
+@bot.event
+async def on_message(message): #budda asked for it, feel free to remove or comment out
+    await bot.process_commands(message)
+    obamasponce = ['You\'re welcome, citizen.', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
+    obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
+    match = obamium.search(message.content)
+    if match and message.author.id != 628093260711198733:
+        await message.channel.send(random.choice(obamasponce))
 
 # Regex thing, Techjar said to remove it so i did. here it is just in case you want to re-enable
 #@bot.event

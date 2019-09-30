@@ -34,8 +34,10 @@ class faq(commands.Cog, name='FAQ'):
                               "**logs** - Shows where to finds logs\n"
                               "**jar** - Crashes and complains about a modified jar\n"
                               "**mcf** - Crashes and says something about a malformed class name\n"
-                              ""
-                              "",
+                              "**heapsize** - Crashes and says info error occurred during VM initialization\n"
+                              "**reservespace** - Crashes and says it could not reserve space for the object heap\n"
+                              "**javabinary** - Crashes and says the Java Binary SE stopped working\n"
+                              "**exceptionaccess** - Crashes and says EXCEPTION_ACCESS_VIOLATION in d3d9.dll",
                               color=0x82f4f4)
         embed.set_author(name="F.A.Q. - Troubleshooting List", url="http://www.vivecraft.org/faq/#troubleshooting",
                          icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
@@ -141,7 +143,7 @@ class faq(commands.Cog, name='FAQ'):
                          icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
         await ctx.send(embed=embed)
 
-    @issue.command(aliases=['modified','moddedjar','willnowexit'])
+    @issue.command(aliases=['modified', 'moddedjar', 'willnowexit'])
     async def jar(self, ctx):
         embed = discord.Embed(title="The game crashes and the error says “The game will now exit” and complains about a modified jar",
                               description="Your profile is launching Forge and is missing some critical JVM arguments. The Vivecraft installer adds these to the profile, but may have been deleted. Ensure your profile JVM args includes `-Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true`",
@@ -150,12 +152,49 @@ class faq(commands.Cog, name='FAQ'):
                          icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
         await ctx.send(embed=embed)
 
-    @issue.command(aliases=['malformed','classname','mfc'])
+    @issue.command(aliases=['malformed', 'classname', 'mfc'])
     async def malformedclassname(self, ctx):
         embed = discord.Embed(title="The game crashes and the error says \"MalformedClassName\"",
                               description="Go to your .minecraft directory and delete usercache.json. That should sort it.",
                               color=0x82f4f4)
         embed.set_author(name="F.A.Q. - Troubleshooting/Crash + Malformed Class Name", url="http://www.vivecraft.org/faq/#troubleshooting",
+                         icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        await ctx.send(embed=embed)
+
+    @issue.command(aliases=['crashheap', 'vmheap', 'maximumheap', 'javaheapspace'])
+    async def heapsize(self, ctx):
+        embed = discord.Embed(title="The game crashes and the error says \"Info Error occurred during initialization of VM Initial heap size set to a larger value than the maximum heap size Picked up _JAVA_OPTIONS: -Xmx###M: Java heap space\"",
+                              description="Check your Windows environment variables for an entry called _JAVA_OPTS that is adding a Xmx256M or similar argument to your java commands. Remove it.",
+                              color=0x82f4f4)
+        embed.set_author(name="F.A.Q. - Troubleshooting/Crash During VM Initialization", url="http://www.vivecraft.org/faq/#troubleshooting",
+                         icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        await ctx.send(embed=embed)
+
+    @issue.command(aliases=['couldnotreserve', 'couldntreserve', '2097152', 'objectheap'])
+    async def reservespace(self, ctx):
+        embed = discord.Embed(title="The game crashes and the error says \"Could not reserve enough space for 2097152KB object heap\"",
+                              description="You do not have 64-bit java installed. Install it or allocate less RAM to the Vivecraft profile. 64-bit and **at least** 2GB RAM is recommended for VR.\n"
+                              "Go get [__Windows Offline (64-bit)__ from here](https://www.java.com/en/download/manual.jsp).",
+                              color=0x82f4f4)
+        embed.set_author(name="F.A.Q. - Troubleshooting/Crash + Could not Reserve Space", url="http://www.vivecraft.org/faq/#troubleshooting",
+                         icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        await ctx.send(embed=embed)
+
+    @issue.command(aliases=['binaryse', 'javabinaryse', 'javase', 'jbse', 'jbs'])
+    async def javabinary(self, ctx):
+        embed = discord.Embed(title="The game crashes and the popup window says 'Java Binary SE has stopped working'",
+                              description="This is caused by a buggy nvidia driver released in January 2017 (v378.49). Try updating your drivers.",
+                              color=0x82f4f4)
+        embed.set_author(name="F.A.Q. - Troubleshooting/Crash + Could not Reserve Space", url="http://www.vivecraft.org/faq/#troubleshooting",
+                         icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        await ctx.send(embed=embed)
+    
+    @issue.command(aliases=['accessviolation', 'exceptionaccessviolation', 'eav', 'd3d9.dll'])
+    async def exceptionaccess(self, ctx):
+        embed = discord.Embed(title="The game (or the installer) crashes and says 'EXCEPTION_ACCESS_VIOLATION' in 'd3d9.dll'",
+                              description="This is caused by an incompatibility between Windows 10 creators update, 64-bit java, and Rivatuner. You will need to either uninstall or update Rivatuner.",
+                              color=0x82f4f4)
+        embed.set_author(name="F.A.Q. - Troubleshooting/Crash + Could not Reserve Space", url="http://www.vivecraft.org/faq/#troubleshooting",
                          icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
         await ctx.send(embed=embed)
 
@@ -168,6 +207,7 @@ class faq(commands.Cog, name='FAQ'):
         embed.add_field(name="General", value="http://www.vivecraft.org/forum/viewforum.php?f=6&sid=d4cc7691f24945f5a4b7c49c210684fd", inline=True)
         embed.add_field(name="Troubleshooting", value="http://www.vivecraft.org/forum/viewforum.php?f=3&sid=d4cc7691f24945f5a4b7c49c210684fd", inline=True)
         embed.add_field(name="Multiplayer", value="http://www.vivecraft.org/forum/viewforum.php?f=4&sid=d4cc7691f24945f5a4b7c49c210684fd", inline=True)
+        embed.add_field(name="Modpacks", value="http://www.vivecraft.org/forum/viewforum.php?f=7&sid=86d1ec6bd700699b3484b5083bbb6da4", inline=True)
         embed.set_footer(text="ping @shay if you have any issues!")
         await ctx.send(embed=embed)
 
