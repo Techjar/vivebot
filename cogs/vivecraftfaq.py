@@ -159,9 +159,6 @@ class faq(commands.Cog, name='FAQ'):
                          icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
         await ctx.send(embed=embed)
 
-    @issue.command(aliases=[''])
-    async def 
-
     @commands.command()
     async def forum(self, ctx):
         '''Link to the forum'''
