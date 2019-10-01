@@ -28,9 +28,11 @@ class faq(commands.Cog, name='FAQ'):
                 root = html.find("div", {"class": "entry-content"})
                 
                 desc = ""
-                title = None
                 image = None
+                found = False
                 for mode in range(0, 2):
+                    if found:
+                        break
                     for element in root.find_all("div", recursive=False):
                         title_element = element.find("blockquote")
                         if title_element is not None and ((mode == 0 and element.attrs['id'] == args[0]) or (mode == 1 and " ".join(args).lower() in title_element.find("p").text.lower())):
@@ -65,7 +67,10 @@ class faq(commands.Cog, name='FAQ'):
                                     for i, item in enumerate(part.find_all("li")):
                                         desc += str(i + 1) + ". " + item.text.strip() + "\n"
                                     desc += "\n"
+                            found = True
                             break
+                        
+                print(desc)
                 
                 # Unused code to list all issues. Too spammy!
                 #for element in root.find_all("div", recursive=False):
@@ -75,7 +80,7 @@ class faq(commands.Cog, name='FAQ'):
                 #        title = title_element.find("p").text
                 #        desc += ((title[:40] + "..") if len(title) > 40 else title) + "\n"
                 
-                if title is not None:
+                if found:
                     embed = discord.Embed(title="", description=desc, color=0x82f4f4)
                     embed.set_author(name="FAQ - " + title, url="http://www.vivecraft.org/faq/#" + id,
                                     icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
