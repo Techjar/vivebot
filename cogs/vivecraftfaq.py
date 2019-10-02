@@ -84,6 +84,8 @@ class faq(commands.Cog, name='FAQ'):
                         embed.set_image(url=image)
                     await ctx.send(embed=embed)
             except:
+                embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
+                await ctx.send(embed=embed)
                 traceback.print_exc()
 
     @commands.command()
