@@ -28,7 +28,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
 
-    fifteenium = re.compile(r'(?i)(1.15\.*when|when.*1\.15|1\.15.*update|update.*1\.15|updated.*1\.15|vivecraft.*1\.15|1\.15.*vivecraft|port.*1\.15|1\.15.*port|1\.15.*available|available.*1\.15)')
+    fifteenium = re.compile(r'(?i)(1.15\.*when|when.*1\.15|1\.15.*update|update.*1\.15|updated.*1\.15|vivecraft.*1\.15|1\.15.*vivecraft|port.*1\.15|1\.15.*port|1\.15.*available|available.*1\.15|1\.15.*progress|progress.*1\.15)')
     if fifteenium.search(message.content):
         with open('115progress.txt', 'r') as file:
             progress = file.read()
