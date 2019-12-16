@@ -7,10 +7,9 @@ class updateprogress(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_role('Developer')
     async def progress(self, ctx, *args):
         '''Sets update progress'''
-        if ctx.message.author.id != 147547441170874369 and ctx.message.author.id != 187385331753025536:
-            return
         if len(args) == 0:
             await ctx.send('You need to provide more arguments, sir.')
             return
@@ -19,10 +18,9 @@ class updateprogress(commands.Cog):
         await ctx.send('Update progress set to: ' + " ".join(args))
 
     @commands.command()
+    @commands.has_role('Developer')
     async def update(self, ctx, *args):
         '''Sets update version'''
-        if ctx.message.author.id != 147547441170874369 and ctx.message.author.id != 187385331753025536:
-            return
         if len(args) == 0:
             await ctx.send('You need to provide more arguments, sir.')
             return
