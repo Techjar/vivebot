@@ -13,6 +13,7 @@ class updateprogress(commands.Cog):
             return
         if len(args) == 0:
             await ctx.send('Not enough arguments.')
+            return
         with open('updateprogress.txt', 'w') as file:
             file.write(" ".join(args))
         await ctx.send('Update progress set to: ' + " ".join(args))
@@ -24,6 +25,7 @@ class updateprogress(commands.Cog):
             return
         if len(args) == 0:
             await ctx.send('Not enough arguments.')
+            return
         with open('updateversion.txt', 'w') as file:
             file.write(" ".join(args))
         await ctx.send('Update version set to: ' + " ".join(args))
