@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from bs4.element import NavigableString
 import sys
 import traceback
+import re
 
 class faq(commands.Cog, name='FAQ'):
     def __init__(self, bot):
@@ -51,7 +52,13 @@ class faq(commands.Cog, name='FAQ'):
                                         if isinstance(tag, NavigableString):
                                             desc += tag
                                         elif tag.name == "a":
-                                            desc += "[" + tag.text + "](" + tag.attrs['href'] + ")"
+                                            link = tag.attrs['href']
+                                            if not re.match(r'^[a-z0-9]+://', link, re.IGNORECASE):
+                                                if link.startswith("/"):
+                                                    link = "http://www.vivecraft.org" + link
+                                                else:
+                                                    link = "http://www.vivecraft.org/faq/" + link
+                                            desc += "[" + tag.text + "](" + link + ")"
                                         elif tag.name == "strong":
                                             desc += "**" + tag.text + "**"
                                         elif tag.name == "i":
@@ -70,7 +77,7 @@ class faq(commands.Cog, name='FAQ'):
                             found = True
                             break
                         
-                print(desc)
+                #print(desc)
                 
                 # Unused code to list all issues. Too spammy!
                 #for element in root.find_all("div", recursive=False):
