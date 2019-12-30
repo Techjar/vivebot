@@ -2,6 +2,8 @@ from discord.ext import commands
 import discord
 import re
 import random
+import time
+
 prefix = "?"
 bot = commands.Bot(command_prefix=prefix)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
@@ -10,6 +12,8 @@ bot.load_extension("cogs.help") #take a guess
 bot.load_extension("cogs.vivecraftfaq")
 bot.load_extension("cogs.system")
 bot.load_extension("cogs.updateprogress")
+
+update_cooldown = 0
 
 @bot.event
 async def on_ready(): #we out here starting
@@ -31,9 +35,10 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     with open('updateversion.txt', 'r') as file:
         fifteenium_version = file.read()
     fifteenium = re.compile('(?i)({0}.*when|when.*{0}|{0}.*update|update.*{0}|updated.*{0}|vivecraft.*{0}|{0}.*vivecraft|port.*{0}|{0}.*port|{0}.*available|available.*{0}|{0}.*progress|progress.*{0})'.format(fifteenium_version.replace('.', '\.')))
-    if fifteenium.search(message.content):
+    if fifteenium.search(message.content) and (time.time() - update_cooldown) > 300:
         with open('updateprogress.txt', 'r') as file:
             progress = file.read()
+        update_cooldown = time.time()
         await message.channel.send('Vivecraft will be updated to MC {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, progress))
 
 # Regex thing, Techjar said to remove it so i did. here it is just in case you want to re-enable
