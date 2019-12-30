@@ -32,6 +32,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
 
+    global update_cooldown
     with open('updateversion.txt', 'r') as file:
         fifteenium_version = file.read()
     fifteenium = re.compile('(?i)({0}.*when|when.*{0}|{0}.*update|update.*{0}|updated.*{0}|vivecraft.*{0}|{0}.*vivecraft|port.*{0}|{0}.*port|{0}.*available|available.*{0}|{0}.*progress|progress.*{0})'.format(fifteenium_version.replace('.', '\.')))
