@@ -27,7 +27,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     if message.author.id == 628093260711198733:
         return
 
-    obamasponce = ['You\'re welcome, citizen.', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
+    obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
     obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
