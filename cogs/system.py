@@ -25,6 +25,20 @@ class system(commands.Cog):
         infbed.add_field(name='<:vive:273632415627476992> Version', value='`v0.1`', inline=True)
         infbed.set_footer(text='Created by shay#0038 (115238234778370049)')
         await ctx.send(embed=infbed)
+        
+    @commands.command()
+    async def tester(self, ctx):
+        '''Assign/remove tester role'''
+        role = discord.utils.get(ctx.guild.roles, name="Tester")
+        try:
+            if role in ctx.author.roles:
+                await ctx.author.remove_roles(role)
+                await ctx.send('You are no longer in the tester group.')
+            else:
+                await ctx.author.add_roles(role)
+                await ctx.send('You are now in the tester group.')
+        except discord.Forbidden:
+            await ctx.send('I am unable to change your role, citizen.')
 
     #I'm not sure if this can be run if you're not the bot owner, so i've disabled it for now
     """@commands.command()
