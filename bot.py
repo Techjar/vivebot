@@ -12,6 +12,7 @@ bot.load_extension("cogs.help") #take a guess
 bot.load_extension("cogs.vivecraftfaq")
 bot.load_extension("cogs.system")
 bot.load_extension("cogs.updateprogress")
+bot.load_extension("cogs.misc")
 
 update_cooldown = 0
 
