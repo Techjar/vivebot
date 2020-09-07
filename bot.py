@@ -28,12 +28,13 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     if message.author.id == 628093260711198733:
         return
 
-    print('Message triggered by {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
+    print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
 
     obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
     obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
+        print('They triggered obamium')
 
     global update_cooldown
     with open('updateversion.txt', 'r') as file:
@@ -44,6 +45,16 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
             progress = file.read()
         update_cooldown = time.time()
         await message.channel.send('Vivecraft will be updated to MC {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, progress))
+
+    dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
+    if not dev_role in message.author.roles:
+        with open('filters.txt', 'r') as file:
+            for line in file.read().splitlines():
+                matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in line.split(' '))
+                if matched:
+                    await message.delete()
+                    print('Deleted their spam! Matcher was: ' + line)
+                
 
 # Regex thing, Techjar said to remove it so i did. here it is just in case you want to re-enable
 #@bot.event
