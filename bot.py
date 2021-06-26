@@ -26,7 +26,7 @@ async def on_ready(): #we out here starting
 @bot.event
 async def on_message(message): #budda asked for it, feel free to remove or comment out
     await bot.process_commands(message)
-    if message.author.id == 628093260711198733:
+    if message.author.id == 628093260711198733 or message.content.startswith(prefix):
         return
 
     print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
