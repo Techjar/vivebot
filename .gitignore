@@ -2,4 +2,5 @@ token.txt
 __pycache__
 updateprogress.txt
 updateversion.txt
+updatemsgid.txt
 filters.txt
