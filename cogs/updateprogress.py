@@ -18,7 +18,7 @@ class updateprogress(commands.Cog):
             file.write(arg)
         with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
             fifteenium_version = file.read()
-        await ctx.send('`Update query response is now:`\nVivecraft will be updated to MC {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, arg))
+        await ctx.send('`Update query response is now:`\nVivecraft will be updated to Minecraft {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, arg))
 
     @commands.command()
     @commands.has_role('Developer')
@@ -31,7 +31,7 @@ class updateprogress(commands.Cog):
             file.write(arg)
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'r') as file:
             progress = file.read()
-        await ctx.send('`Update query will respond to {0}, and response is now:`\nVivecraft will be updated to MC {0} as soon as possible.\nCurrent progress: {1}'.format(arg, progress))
+        await ctx.send('`Update query will respond to {0}, and response is now:`\nVivecraft will be updated to Minecraft {0} as soon as possible.\nCurrent progress: {1}'.format(arg, progress))
 
 def setup(bot):
     bot.add_cog(updateprogress(bot))

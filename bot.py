@@ -45,7 +45,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'r') as file:
             progress = file.read()
         update_cooldown = time.time()
-        await message.channel.send('Vivecraft will be updated to MC {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, progress))
+        await message.channel.send('Vivecraft will be updated to Minecraft {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, progress))
 
     dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
     if not dev_role in message.author.roles:
