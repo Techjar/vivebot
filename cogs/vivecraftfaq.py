@@ -23,82 +23,83 @@ class faq(commands.Cog, name='FAQ'):
             embed.set_footer(text="ping @shay#0038 or @Techjar#3305 if you have any issues!")
             await ctx.send(embed=embed)
         else:
-            try:
-                response = requests.get("http://www.vivecraft.org/faq/", timeout=3)
-                html = BeautifulSoup(response.text, "html.parser")
-                root = html.find("div", {"class": "entry-content"})
-                
-                desc = ""
-                image = None
-                found = False
-                for mode in range(0, 2):
-                    if found:
-                        break
-                    for element in root.find_all("div", recursive=False):
-                        title_element = element.find("blockquote")
-                        if title_element is not None and ((mode == 0 and element.attrs['id'] == args[0]) or (mode == 1 and " ".join(args).lower() in title_element.find("p").text.lower())):
-                            id = element.attrs['id']
-                            title = title_element.find("p").text
-                            for part in element.find_all(True, recursive=False):
-                                if part.name == "p":
-                                    if image is None:
-                                        for img in part.find_all("img"):
-                                            image = img.attrs['src']
-                                            break
-                                    
-                                    if not part.text.strip():
-                                        continue
-                                    for tag in part.contents:
-                                        if isinstance(tag, NavigableString):
-                                            desc += tag
-                                        elif tag.name == "a":
-                                            link = tag.attrs['href']
-                                            if not re.match(r'^[a-z0-9]+://', link, re.IGNORECASE):
-                                                if link.startswith("/"):
-                                                    link = "http://www.vivecraft.org" + link
-                                                else:
-                                                    link = "http://www.vivecraft.org/faq/" + link
-                                            desc += "[" + tag.text + "](" + link + ")"
-                                        elif tag.name == "strong":
-                                            desc += "**" + tag.text + "**"
-                                        elif tag.name == "i":
-                                            desc += "*" + tag.text + "*"
-                                        else:
-                                            desc += tag.text
-                                    desc += "\n\n"
-                                elif part.name == "ul":
-                                    for item in part.find_all("li"):
-                                        desc += "• " + item.text.strip() + "\n"
-                                    desc += "\n"
-                                elif part.name == "ol":
-                                    for i, item in enumerate(part.find_all("li")):
-                                        desc += str(i + 1) + ". " + item.text.strip() + "\n"
-                                    desc += "\n"
-                            found = True
+            async with ctx.channel.typing():
+                try:
+                    response = requests.get("http://www.vivecraft.org/faq/", timeout=3)
+                    html = BeautifulSoup(response.text, "html.parser")
+                    root = html.find("div", {"class": "entry-content"})
+                    
+                    desc = ""
+                    image = None
+                    found = False
+                    for mode in range(0, 2):
+                        if found:
                             break
-                        
-                #print(desc)
-                
-                # Unused code to list all issues. Too spammy!
-                #for element in root.find_all("div", recursive=False):
-                #    title_element = element.find("blockquote")
-                #    if title_element is not None:
-                #        desc += "**" + element.attrs['id'] + "** - "
-                #        title = title_element.find("p").text
-                #        desc += ((title[:40] + "..") if len(title) > 40 else title) + "\n"
-                
-                if found:
-                    embed = discord.Embed(title="", description=desc, color=0x82f4f4)
-                    embed.set_author(name="FAQ - " + title, url="http://www.vivecraft.org/faq/#" + id,
-                                    icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
-                    embed.add_field(name="For more questions see the full FAQ", value="http://www.vivecraft.org/faq/", inline=True)
-                    if image is not None:
-                        embed.set_image(url=image)
+                        for element in root.find_all("div", recursive=False):
+                            title_element = element.find("blockquote")
+                            if title_element is not None and ((mode == 0 and element.attrs['id'] == args[0]) or (mode == 1 and " ".join(args).lower() in title_element.find("p").text.lower())):
+                                id = element.attrs['id']
+                                title = title_element.find("p").text
+                                for part in element.find_all(True, recursive=False):
+                                    if part.name == "p":
+                                        if image is None:
+                                            for img in part.find_all("img"):
+                                                image = img.attrs['src']
+                                                break
+                                        
+                                        if not part.text.strip():
+                                            continue
+                                        for tag in part.contents:
+                                            if isinstance(tag, NavigableString):
+                                                desc += tag
+                                            elif tag.name == "a":
+                                                link = tag.attrs['href']
+                                                if not re.match(r'^[a-z0-9]+://', link, re.IGNORECASE):
+                                                    if link.startswith("/"):
+                                                        link = "http://www.vivecraft.org" + link
+                                                    else:
+                                                        link = "http://www.vivecraft.org/faq/" + link
+                                                desc += "[" + tag.text + "](" + link + ")"
+                                            elif tag.name == "strong":
+                                                desc += "**" + tag.text + "**"
+                                            elif tag.name == "i":
+                                                desc += "*" + tag.text + "*"
+                                            else:
+                                                desc += tag.text
+                                        desc += "\n\n"
+                                    elif part.name == "ul":
+                                        for item in part.find_all("li"):
+                                            desc += "• " + item.text.strip() + "\n"
+                                        desc += "\n"
+                                    elif part.name == "ol":
+                                        for i, item in enumerate(part.find_all("li")):
+                                            desc += str(i + 1) + ". " + item.text.strip() + "\n"
+                                        desc += "\n"
+                                found = True
+                                break
+                            
+                    #print(desc)
+                    
+                    # Unused code to list all issues. Too spammy!
+                    #for element in root.find_all("div", recursive=False):
+                    #    title_element = element.find("blockquote")
+                    #    if title_element is not None:
+                    #        desc += "**" + element.attrs['id'] + "** - "
+                    #        title = title_element.find("p").text
+                    #        desc += ((title[:40] + "..") if len(title) > 40 else title) + "\n"
+                    
+                    if found:
+                        embed = discord.Embed(title="", description=desc, color=0x82f4f4)
+                        embed.set_author(name="FAQ - " + title, url="http://www.vivecraft.org/faq/#" + id,
+                                        icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+                        embed.add_field(name="For more questions see the full FAQ", value="http://www.vivecraft.org/faq/", inline=True)
+                        if image is not None:
+                            embed.set_image(url=image)
+                        await ctx.send(embed=embed)
+                except:
+                    embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
                     await ctx.send(embed=embed)
-            except:
-                embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
-                await ctx.send(embed=embed)
-                traceback.print_exc()
+                    traceback.print_exc()
 
     @commands.command()
     async def forum(self, ctx):
