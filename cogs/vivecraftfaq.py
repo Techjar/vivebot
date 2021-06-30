@@ -95,7 +95,11 @@ class faq(commands.Cog, name='FAQ'):
                         embed.add_field(name="For more questions see the full FAQ", value="http://www.vivecraft.org/faq/", inline=True)
                         if image is not None:
                             embed.set_image(url=image)
-                        await ctx.send(embed=embed)
+                        if ctx.message.reference is not None:
+                            await ctx.send(embed=embed, reference=ctx.message.reference)
+                            await ctx.message.delete()
+                        else:
+                            await ctx.send(embed=embed)
                 except:
                     embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
                     await ctx.send(embed=embed)
