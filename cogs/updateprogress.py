@@ -12,7 +12,7 @@ class updateprogress(commands.Cog):
             fifteenium_version = file.read()
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'r') as file:
             progress = file.read()
-        message_str = 'Vivecraft will be updated to Minecraft {0} as soon as possible.\nCurrent progress: {1}'.format(fifteenium_version, progress)
+        message_str = 'Vivecraft will be updated to Minecraft {0} as soon as possible, citizens.\nThe current progress is: {1}'.format(fifteenium_version, progress)
         
         channel = discord.utils.get(ctx.guild.channels, id = int(os.environ.get('UPDATE_CHANNEL_ID')))
         try:
