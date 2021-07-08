@@ -41,7 +41,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
         fifteenium_version = file.read()
     fifteenium = re.compile('(?i)({0}.*when|when.*{0}|{0}.*update|update.*{0}|updated.*{0}|vivecraft.*{0}|{0}.*vivecraft|port.*{0}|{0}.*port|{0}.*available|available.*{0}|{0}.*progress|progress.*{0}|{0}.*develop|develop.*{0}|{0}.*release|release.*{0})'.format(fifteenium_version.replace('.', '\.')))
-    if message.channel.id != int(os.environ.get('UPDATE_CHANNEL_ID')) and fifteenium_version != "null" and fifteenium.search(message.content) and (time.time() - update_cooldown) > 300:
+    if message.channel.id != int(os.environ.get('UPDATE_CHANNEL_ID')) and fifteenium_version != "null" and len(message.content.split()) >= 5 and fifteenium.search(message.content) and (time.time() - update_cooldown) > 300:
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'r') as file:
             progress = file.read()
         update_cooldown = time.time()
