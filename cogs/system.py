@@ -26,6 +26,15 @@ class system(commands.Cog):
         infbed.set_footer(text='Created by shay#0038 (115238234778370049)')
         await ctx.send(embed=infbed)
 
+    @commands.command()
+    @commands.has_role('Developer')
+    async def say(self, ctx, *args):
+        '''Make the bot say something'''
+        if ctx.message.channel_mentions:
+            await ctx.message.channel_mentions[0].send(' '.join(args[1:]))
+        else:
+            await ctx.send('You need to specify a channel, sir.')
+
     #I'm not sure if this can be run if you're not the bot owner, so i've disabled it for now
     """@commands.command()
                 async def shutdown(self, ctx):
