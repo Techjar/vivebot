@@ -35,6 +35,18 @@ class system(commands.Cog):
         else:
             await ctx.send('You need to specify a channel, sir.')
 
+    @commands.command()
+    @commands.has_role('Developer')
+    async def poll(self, ctx, args):
+        '''Make a poll message'''
+        if ctx.message.channel_mentions:
+            msg_text = ' '.join(args[1:]) + "\n\nReact with 👍 for **yes** or 👎 for **no**."
+            msg = await ctx.message.channel_mentions[0].send(msg_text)
+            await msg.add_reaction("👍")
+            await msg.add_reaction("👎")
+        else:
+            await ctx.send('You need to specify a channel, sir.')
+
     #I'm not sure if this can be run if you're not the bot owner, so i've disabled it for now
     """@commands.command()
                 async def shutdown(self, ctx):
