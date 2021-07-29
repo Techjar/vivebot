@@ -37,7 +37,7 @@ class system(commands.Cog):
 
     @commands.command()
     @commands.has_role('Developer')
-    async def poll(self, ctx, args):
+    async def poll(self, ctx, *args):
         '''Make a poll message'''
         if ctx.message.channel_mentions:
             msg_text = ' '.join(args[1:]) + "\n\nReact with 👍 for **yes** or 👎 for **no**."
