@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-import requests
+from aiohttp_requests import requests
 from bs4 import BeautifulSoup
 from bs4.element import NavigableString
 import sys
@@ -25,8 +25,9 @@ class faq(commands.Cog, name='FAQ'):
         else:
             async with ctx.channel.typing():
                 try:
-                    response = requests.get("http://www.vivecraft.org/faq/", timeout=3)
-                    html = BeautifulSoup(response.text, "html.parser")
+                    response = await requests.get("http://www.vivecraft.org/faq/", timeout=5)
+                    resp_text = await response.text()
+                    html = BeautifulSoup(resp_text, "html.parser")
                     root = html.find("div", {"class": "entry-content"})
                     
                     desc = ""

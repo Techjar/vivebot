@@ -25,6 +25,7 @@ class updateprogress(commands.Cog):
         
         if fifteenium_version != "null":
             new_message = await channel.send(message_str)
+            await new_message.publish()
             with open(os.environ.get('DATA_DIR') + 'updatemsgid.txt', 'w') as file:
                 file.write(str(new_message.id))
         
