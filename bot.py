@@ -3,7 +3,9 @@ import discord
 import re
 import random
 import time
+import datetime
 import os
+import asyncio
 
 prefix = "?"
 bot = commands.Bot(command_prefix=prefix)
@@ -17,11 +19,24 @@ bot.load_extension("cogs.misc")
 
 update_cooldown = 0
 
+def is_birthday():
+  today = datetime.today()
+  return today >= datetime(today.year, 8, 4) and today < datetime(today.year, 8, 11)
+
+async def update_status():
+  while True:
+    if is_birthday():
+      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="birthday eeek"))
+    else:
+      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the masses"))
+    await asyncio.sleep(60)
+
 @bot.event
 async def on_ready(): #we out here starting
     print(bot.user.name)
     print(bot.user.id)
     print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
+    update_status()
 
 @bot.event
 async def on_message(message): #budda asked for it, feel free to remove or comment out
@@ -32,10 +47,17 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
 
     obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
-    obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
+    obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama|happy birthday obama|happy birthday, obama)')
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
         print('They triggered obamium')
+
+    if is_birthday():
+      birthdaysponce = ['Thank you, citizen. 🥳', 'You\'re too kind.', 'It\'s no big deal.', 'Happy Birthday to you too. <:obamahead:872663893409931264>']
+      birthdayium = re.compile(r'(?i)(happy birthday obama|happy birthday, obama)')
+      if birthdayium.search(message.content):
+          await message.channel.send(random.choice(birthdaysponce))
+          print('They triggered birthdayium')
 
     global update_cooldown
     with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
