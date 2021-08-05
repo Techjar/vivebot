@@ -36,7 +36,7 @@ async def on_ready(): #we out here starting
     print(bot.user.name)
     print(bot.user.id)
     print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
-    update_status()
+    await update_status()
 
 @bot.event
 async def on_message(message): #budda asked for it, feel free to remove or comment out
