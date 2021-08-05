@@ -26,9 +26,9 @@ def is_birthday():
 async def update_status():
   while True:
     if is_birthday():
-      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="birthday week"))
+      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Obama's Birthday Week"))
     else:
-      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the masses"))
+      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Masses"))
     await asyncio.sleep(60)
 
 @bot.event
@@ -53,7 +53,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
         print('They triggered obamium')
 
     if is_birthday():
-      birthdaysponce = ['Thank you, citizen. 🥳', 'You\'re too kind.', 'It\'s no big deal.', 'Happy Birthday to you too. <:obamahead:872663893409931264>']
+      birthdaysponce = ['Thank you, citizen. 🥳', 'You\'re too kind.', 'It\'s no big deal.', 'Happy Birthday to you too. <:obamahead:727681381689196624>']
       birthdayium = re.compile(r'(?i)(happy birthday obama|happy birthday, obama)')
       if birthdayium.search(message.content):
           await message.channel.send(random.choice(birthdaysponce))
