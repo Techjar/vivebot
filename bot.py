@@ -26,7 +26,7 @@ def is_birthday():
 async def update_status():
   while True:
     if is_birthday():
-      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="birthday eeek"))
+      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="birthday week"))
     else:
       await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the masses"))
     await asyncio.sleep(60)
