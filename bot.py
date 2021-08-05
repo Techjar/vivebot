@@ -3,7 +3,7 @@ import discord
 import re
 import random
 import time
-import datetime
+from datetime import date
 import os
 import asyncio
 
@@ -20,8 +20,8 @@ bot.load_extension("cogs.misc")
 update_cooldown = 0
 
 def is_birthday():
-  today = datetime.now()
-  return today >= datetime(today.year, 8, 4) and today < datetime(today.year, 8, 11)
+  today = date.today()
+  return today >= date(today.year, 8, 4) and today < date(today.year, 8, 11)
 
 async def update_status():
   while True:
