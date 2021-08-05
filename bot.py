@@ -20,7 +20,7 @@ bot.load_extension("cogs.misc")
 update_cooldown = 0
 
 def is_birthday():
-  today = datetime.today()
+  today = datetime.now()
   return today >= datetime(today.year, 8, 4) and today < datetime(today.year, 8, 11)
 
 async def update_status():
@@ -47,7 +47,7 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
 
     obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
-    obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama|happy birthday obama|happy birthday, obama)')
+    obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
     if obamium.search(message.content):
         await message.channel.send(random.choice(obamasponce))
         print('They triggered obamium')
