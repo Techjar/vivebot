@@ -13,10 +13,10 @@ class misc(commands.Cog):
         try:
             if role in ctx.author.roles:
                 await ctx.author.remove_roles(role)
-                await ctx.send('Thanks, {}. You are no longer in the tester group.'.format(ctx.author.name))
+                await ctx.send('Thanks, {}. You are no longer in the tester group.'.format(discord.utils.escape_mentions(ctx.author.name)))
             else:
                 await ctx.author.add_roles(role)
-                await ctx.send('You are now in the tester group. Welcome aboard, {}.'.format(ctx.author.name))
+                await ctx.send('You are now in the tester group. Welcome aboard, {}.'.format(discord.utils.escape_mentions(ctx.author.name)))
         except discord.Forbidden:
             await ctx.send('I am unable to change your role, citizen.')
 
