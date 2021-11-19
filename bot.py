@@ -75,8 +75,9 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
     if not dev_role in message.author.roles:
         with open(os.environ.get('DATA_DIR') + 'filters.txt', 'r') as file:
             for line in file.read().splitlines():
-                if line.strip():
-                    matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in line.split())
+                words = line.split()
+                if words:
+                    matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in words)
                     if matched:
                         await message.delete()
                         print('Deleted their spam! Matcher was: ' + line)
