@@ -18,6 +18,7 @@ bot.load_extension("cogs.updateprogress")
 bot.load_extension("cogs.misc")
 
 update_cooldown = 0
+spam_timer = {}
 
 def is_birthday():
   today = date.today()
@@ -39,7 +40,7 @@ async def on_ready(): #we out here starting
     await update_status()
 
 @bot.event
-async def on_message(message): #budda asked for it, feel free to remove or comment out
+async def on_message(message):
     await bot.process_commands(message)
     if message.author.id == 628093260711198733 or message.content.startswith(prefix):
         return
@@ -79,8 +80,27 @@ async def on_message(message): #budda asked for it, feel free to remove or comme
                 if words:
                     matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in words)
                     if matched:
+                        print('Spam detected! Matcher was: ' + line)
+                        if message.author.id in spam_timer:
+                            timer = spam_timer[message.author.id]
+                            if time.time() - timer['time'] < 120:
+                                timer['count'] += 1
+                            else:
+                                timer['count'] = 1
+                            if timer['count'] >= 3:
+                                jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
+                                muted_role = discord.utils.get(message.guild.roles, name="Muted")
+                                if muted_role not in message.author.roles:
+                                    await message.author.add_roles(muted_role)
+                                    await jail_channel.send('{0} was muted for sending spam.'.format(message.author.mention))
+                                    await message.author.send('You were muted for sending spam. This is likely due to your account being hijacked. Once you\'ve recovered your account, message one of the developers/admins to be unmuted.')
+                                    print('Muted them for sending too much spam!')
+                            timer['time'] = time.time()
+                        else:
+                            spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
                         await message.delete()
-                        print('Deleted their spam! Matcher was: ' + line)
+                        break
+                        
                 
 
 # Regex thing, Techjar said to remove it so i did. here it is just in case you want to re-enable

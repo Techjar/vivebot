@@ -38,7 +38,7 @@ class faq(commands.Cog, name='FAQ'):
                             break
                         for element in root.find_all("div", recursive=False):
                             title_element = element.find("blockquote")
-                            if title_element is not None and ((mode == 0 and element.attrs['id'] == args[0]) or (mode == 1 and " ".join(args).lower() in title_element.find("p").text.lower())):
+                            if title_element is not None and ((mode == 0 and element.attrs['id'] == args[0].lower()) or (mode == 1 and " ".join(args).lower() in title_element.find("p").text.lower())):
                                 id = element.attrs['id']
                                 title = title_element.find("p").text
                                 for part in element.find_all(True, recursive=False):
