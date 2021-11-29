@@ -83,16 +83,16 @@ async def on_message(message):
                         print('Spam detected! Matcher was: ' + line)
                         if message.author.id in spam_timer:
                             timer = spam_timer[message.author.id]
-                            if time.time() - timer['time'] < 120:
+                            if time.time() - timer['time'] < 30:
                                 timer['count'] += 1
                             else:
                                 timer['count'] = 1
-                            if timer['count'] >= 3:
+                            if timer['count'] >= 2:
                                 jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
                                 muted_role = discord.utils.get(message.guild.roles, name="Muted")
                                 if muted_role not in message.author.roles:
                                     await message.author.add_roles(muted_role)
-                                    await jail_channel.send('{0} was muted for sending spam.'.format(message.author.mention))
+                                    await jail_channel.send('{0} was muted for sending spam. Matched words: `{1}`'.format(message.author.mention, line))
                                     await message.author.send('You were muted for sending spam. This is likely due to your account being hijacked. Once you\'ve recovered your account, message one of the developers/admins to be unmuted.')
                                     print('Muted them for sending too much spam!')
                             timer['time'] = time.time()
