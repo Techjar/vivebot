@@ -119,5 +119,35 @@ class faq(commands.Cog, name='FAQ'):
         embed.set_footer(text="ping @shay#0038 or @Techjar#3305 if you have any issues!")
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=['download', 'dl'])
+    async def downloads(self, ctx):
+        '''Embed download links'''
+        try:
+            response = await requests.get("http://www.vivecraft.org/downloads/", timeout=5)
+            resp_text = await response.text()
+            html = BeautifulSoup(resp_text, "html.parser")
+            table = html.find("table")
+            rows = table.find_all("tr")
+            
+            versions = []
+            for cell in rows[0].find_all("th")[1:]:
+                versions.append({'name': cell.text})
+            for idx, cell in enumerate(rows[2].find_all("td")[1:]):
+                versions[idx]['url'] = cell.find("a").attrs['href']
+            
+            embed = discord.Embed(title="", description="Download links for server-side plugins and mods, as well as discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x4287d7)
+            embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+            for ver in versions:
+                embed.add_field(name=ver['name'], value=ver['url'], inline=True)
+            if ctx.message.reference is not None:
+                await ctx.send(embed=embed, reference=ctx.message.reference)
+                await ctx.message.delete()
+            else:
+                await ctx.send(embed=embed)
+        except:
+            embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
+            await ctx.send(embed=embed)
+            traceback.print_exc()
+
 def setup(bot):
     bot.add_cog(faq(bot))
