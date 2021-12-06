@@ -106,19 +106,6 @@ class faq(commands.Cog, name='FAQ'):
                     await ctx.send(embed=embed)
                     traceback.print_exc()
 
-    @commands.command()
-    async def forum(self, ctx):
-        '''Link to the forum'''
-        embed = discord.Embed(title=" ", color=0x82f4f4)
-        embed.set_author(name="Forum - Jump To:", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
-        embed.add_field(name="Main Page", value="http://www.vivecraft.org/forum/", inline=True)
-        embed.add_field(name="General", value="http://www.vivecraft.org/forum/viewforum.php?f=6", inline=True)
-        embed.add_field(name="Troubleshooting", value="http://www.vivecraft.org/forum/viewforum.php?f=3", inline=True)
-        embed.add_field(name="Multiplayer", value="http://www.vivecraft.org/forum/viewforum.php?f=4", inline=True)
-        embed.add_field(name="Modpacks", value="http://www.vivecraft.org/forum/viewforum.php?f=7", inline=True)
-        embed.set_footer(text="ping @shay#0038 or @Techjar#3305 if you have any issues!")
-        await ctx.send(embed=embed)
-
     @commands.command(aliases=['download', 'dl'])
     async def downloads(self, ctx):
         '''Embed download links'''
@@ -147,7 +134,7 @@ class faq(commands.Cog, name='FAQ'):
             find_urls(4, 'spigot_url')
             find_urls(5, 'forge_url')
             
-            embed = discord.Embed(title="", description="All download links, including discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x4287d7)
+            embed = discord.Embed(title="", description="All download links, including discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
             for ver in versions:
                 field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
@@ -165,6 +152,19 @@ class faq(commands.Cog, name='FAQ'):
             embed = discord.Embed(title="An error occurred", description="Please report this to @Techjar#3305", color=0xff0000)
             await ctx.send(embed=embed)
             traceback.print_exc()
+
+    @commands.command()
+    async def forum(self, ctx):
+        '''Link to the forum'''
+        embed = discord.Embed(title=" ", color=0x82f4f4)
+        embed.set_author(name="Forum - Jump To:", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        embed.add_field(name="Main Page", value="http://www.vivecraft.org/forum/", inline=True)
+        embed.add_field(name="General", value="http://www.vivecraft.org/forum/viewforum.php?f=6", inline=True)
+        embed.add_field(name="Troubleshooting", value="http://www.vivecraft.org/forum/viewforum.php?f=3", inline=True)
+        embed.add_field(name="Multiplayer", value="http://www.vivecraft.org/forum/viewforum.php?f=4", inline=True)
+        embed.add_field(name="Modpacks", value="http://www.vivecraft.org/forum/viewforum.php?f=7", inline=True)
+        embed.set_footer(text="ping @shay#0038 or @Techjar#3305 if you have any issues!")
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(faq(bot))
