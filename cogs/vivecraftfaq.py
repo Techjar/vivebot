@@ -132,13 +132,30 @@ class faq(commands.Cog, name='FAQ'):
             versions = []
             for cell in rows[0].find_all("th")[1:]:
                 versions.append({'name': cell.text})
-            for idx, cell in enumerate(rows[2].find_all("td")[1:]):
-                versions[idx]['url'] = cell.find("a").attrs['href']
             
-            embed = discord.Embed(title="", description="Download links for server-side plugins and mods, as well as discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x4287d7)
+            def find_urls(row, key):
+                span_acc = 0
+                for idx, cell in enumerate(rows[row].find_all("td")[1:]):
+                    link = cell.find("a")
+                    if link is not None:
+                        span = int(cell.attrs['colspan']) if 'colspan' in cell.attrs else 1
+                        for i in range(0, span):
+                            versions[idx + span_acc + i][key] = link.attrs['href']
+                        span_acc += span - 1
+            
+            find_urls(2, 'client_url')
+            find_urls(4, 'spigot_url')
+            find_urls(5, 'forge_url')
+            
+            embed = discord.Embed(title="", description="All download links, including discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x4287d7)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
             for ver in versions:
-                embed.add_field(name=ver['name'], value=ver['url'], inline=True)
+                field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
+                if 'spigot_url' in ver:
+                    field_desc += "\n[Spigot Server Plugin](" + ver['spigot_url'] + ")"
+                if 'forge_url' in ver:
+                    field_desc += "\n[Forge Server Mod](" + ver['forge_url'] + ")"
+                embed.add_field(name=ver['name'], value=field_desc, inline=True)
             if ctx.message.reference is not None:
                 await ctx.send(embed=embed, reference=ctx.message.reference)
                 await ctx.message.delete()
