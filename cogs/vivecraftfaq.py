@@ -134,7 +134,7 @@ class faq(commands.Cog, name='FAQ'):
             find_urls(4, 'spigot_url')
             find_urls(5, 'forge_url')
             
-            embed = discord.Embed(title="", description="All download links, including discontinued legacy versions, can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/).", color=0x5e9d34)
+            embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
             for ver in versions:
                 field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
