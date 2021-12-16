@@ -1,7 +1,6 @@
 from discord.ext import commands
 import time
 import discord
-import re
 
 class system(commands.Cog):
     def __init__(self, bot):
@@ -35,27 +34,6 @@ class system(commands.Cog):
             await ctx.message.channel_mentions[0].send(' '.join(args[1:]))
         else:
             await ctx.send('You need to specify a channel, sir.')
-
-    @commands.command()
-    @commands.has_role('Developer')
-    async def react(self, ctx, *args):
-        '''Make the bot say something'''
-        if len(args) >= 2:
-            msg = await ctx.fetch_message(int(args[0]))
-            if msg is not None:
-                res = re.search(':(.*):', args[1])
-                if res is not None:
-                    emoji = discord.utils.get(self.bot.emojis, name=res.group(1))
-                    if emoji is not None:
-                        await msg.add_reaction(emoji)
-                    else:
-                        await ctx.send('That emoji is invalid.')
-                else:
-                    await msg.add_reaction(args[1])
-            else:
-                await ctx.send('That message ID is invalid.')
-        else:
-            await ctx.send('You\'re missing some arguments.')
 
     @commands.command()
     @commands.has_role('Developer')
