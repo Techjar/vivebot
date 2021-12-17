@@ -37,6 +37,12 @@ class system(commands.Cog):
 
     @commands.command()
     @commands.has_role('Developer')
+    async def react(self, ctx, message: discord.Message, emoji: discord.PartialEmoji):
+        '''Make the bot react to a message'''
+        await message.add_reaction(emoji)
+
+    @commands.command()
+    @commands.has_role('Developer')
     async def poll(self, ctx, *args):
         '''Make a poll message'''
         if ctx.message.channel_mentions:
