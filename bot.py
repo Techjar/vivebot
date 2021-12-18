@@ -1,42 +1,53 @@
+import aiohttp
+import asyncio
+from datetime import date
 from discord.ext import commands
 import discord
+import os
 import re
 import random
 import time
-from datetime import date
-import os
-import asyncio
 
-prefix = "?"
-bot = commands.Bot(command_prefix=prefix)
-bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
-#these cogs really just exist so that i dont have to cram it all in the main file.
-bot.load_extension("cogs.help") #take a guess
-bot.load_extension("cogs.vivecraftfaq")
-bot.load_extension("cogs.system")
-bot.load_extension("cogs.updateprogress")
-bot.load_extension("cogs.misc")
+prefix = '?'
+bot = commands.Bot(
+    command_prefix=prefix,
+    activity=discord.Activity(type=discord.ActivityType.watching, name='The Masses'),
+    help_command=None,
+)
+
+bot.load_extension('cogs.help')
+bot.load_extension('cogs.vivecraftfaq')
+bot.load_extension('cogs.system')
+bot.load_extension('cogs.updateprogress')
+bot.load_extension('cogs.misc')
 
 update_cooldown = 0
 spam_timer = {}
 
 def is_birthday():
-  today = date.today()
-  return today >= date(today.year, 8, 4) and today < date(today.year, 8, 11)
+    today = date.today()
+    return today >= date(today.year, 8, 4) and today < date(today.year, 8, 11)
 
 async def update_status():
-  while True:
-    if is_birthday():
-      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Obama's Birthday Week"))
-    else:
-      await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Masses"))
-    await asyncio.sleep(60)
+    birthday_activity = discord.Activity(type=discord.ActivityType.playing, name='Obama\'s Birthday Week')
+    normal_activity = discord.Activity(type=discord.ActivityType.watching, name='The Masses')
+    while True:
+        current_activity = bot.guilds[0].me.activity or bot.activity
+        if is_birthday() and current_activity.name != birthday_activity.name:
+            await bot.change_presence(activity=birthday_activity)
+        elif current_activity.name != normal_activity.name:
+            await bot.change_presence(activity=normal_activity)
+        await asyncio.sleep(3600)
 
 @bot.event
-async def on_ready(): #we out here starting
-    print(bot.user.name)
-    print(bot.user.id)
-    print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
+async def on_ready():
+    print(
+        f'{bot.user} ({bot.user.id})\n'
+        'Created for the Vivecraft Discord server by shay#0038 (115238234778370049)'
+    )
+
+async def init():
+    await bot.wait_until_ready()
     await update_status()
 
 @bot.event
@@ -45,7 +56,7 @@ async def on_message(message):
     if message.author.id == 628093260711198733 or message.content.startswith(prefix):
         return
 
-    print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
+    print(f'Message received from {message.author} ({message.author.id})')
 
     obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
     obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
@@ -100,17 +111,6 @@ async def on_message(message):
                             spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
                         await message.delete()
                         break
-                        
-                
-
-# Regex thing, Techjar said to remove it so i did. here it is just in case you want to re-enable
-#@bot.event
-#async def on_message(message): #aah oh no i cant read
-#    await bot.process_commands(message)
-#    hmd = re.compile(r'(?i)((on )(headset|hmd|oculus|rift|vive))|((showing |displaying )(on|on the|on our)( monitor| monnitor| screen| steamvr))|(hmd|headset|oculus|rift|vive)( doesnt| doesn\'t| don\'t| dont| wont| won\'t)')
-#    match = hmd.search(message.content)
-#    if match and message.author.id != 598277022787043370 and '?bp' not in message.content.lower():
-#        await message.channel.send("{}, it sounds like the game is displaying on your monitor, but not the headset. If this is the case, may I remind you to read the FAQ before posting such inquiries. It's the first thing there!\n<http://www.vivecraft.org/faq/#troubleshooting>".format(message.author.mention))
 
 if os.path.exists('token.txt'):
     with open('token.txt') as f:
@@ -118,4 +118,5 @@ if os.path.exists('token.txt'):
 else:
     token = os.environ.get('BOT_TOKEN')
 
+bot.loop.create_task(init())
 bot.run(token)

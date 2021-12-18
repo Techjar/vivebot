@@ -1,15 +1,16 @@
 from discord.ext import commands
-import time
 import discord
+import time
 
-class system(commands.Cog):
+
+class System(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def ping(self, ctx):
-        '''Shows the bot\'s latency'''
-        pingprior=time.monotonic()
+        """Show the bot\'s latency"""
+        pingprior = time.monotonic()
         ping = discord.Embed(title='Pong! :ping_pong:', description='```xl\n<:vive:683522338331033601> Waiting to finish...```')
         message=await ctx.send(embed=ping)
         ping=(time.monotonic() - pingprior) * 1000
@@ -19,7 +20,7 @@ class system(commands.Cog):
 
     @commands.command()
     async def info(self, ctx):
-        '''Bot info. may do server info later idk'''
+        """Show info about the bot"""
         infbed = discord.Embed(title='🖥 Info', description=' ', color=0x96c6fa)
         infbed.add_field(name='📚 Library', value='`Discord.py`', inline=True)
         infbed.add_field(name='<:vive:683522338331033601> Version', value='`v0.1`', inline=True)
@@ -28,37 +29,26 @@ class system(commands.Cog):
 
     @commands.command()
     @commands.has_role('Developer')
-    async def say(self, ctx, *args):
-        '''Make the bot say something'''
-        if ctx.message.channel_mentions:
-            await ctx.message.channel_mentions[0].send(' '.join(args[1:]))
-        else:
-            await ctx.send('You need to specify a channel, sir.')
+    async def say(self, ctx, channel: discord.TextChannel, *, content):
+        """Make the bot say something"""
+        await channel.send(content[:2000])
 
     @commands.command()
     @commands.has_role('Developer')
     async def react(self, ctx, message: discord.Message, emoji: discord.PartialEmoji):
-        '''Make the bot react to a message'''
+        """Make the bot react to a message"""
         await message.add_reaction(emoji)
 
     @commands.command()
     @commands.has_role('Developer')
-    async def poll(self, ctx, *args):
-        '''Make a poll message'''
-        if ctx.message.channel_mentions:
-            msg_text = ' '.join(args[1:]) + "\n\nReact with 👍 for **yes** or 👎 for **no**."
-            msg = await ctx.message.channel_mentions[0].send(msg_text)
-            await msg.add_reaction("👍")
-            await msg.add_reaction("👎")
-        else:
-            await ctx.send('You need to specify a channel, sir.')
+    async def poll(self, ctx, channel: discord.TextChannel, *, content):
+        """Create a poll message"""
+        msg_text = '\n\nReact with \N{THUMBS UP SIGN} for **yes** or \N{THUMBS DOWN SIGN} for **no**.'
+        msg_text = content[:len(msg_text)] + msg_text
+        msg = await channel.send(msg_text)
+        await msg.add_reaction('\N{THUMBS UP SIGN}')
+        await msg.add_reaction('\N{THUMBS DOWN SIGN}')
 
-    #I'm not sure if this can be run if you're not the bot owner, so i've disabled it for now
-    """@commands.command()
-                async def shutdown(self, ctx):
-                    '''Shuts down'''
-                    await ctx.send('<:vive:683522338331033601> Shutting down.')
-                    await ctx.bot.close()"""
 
 def setup(bot):
-    bot.add_cog(system(bot))
+    bot.add_cog(System(bot))

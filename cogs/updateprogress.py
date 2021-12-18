@@ -1,9 +1,10 @@
 from discord.ext import commands
-import time
 import discord
 import os
+import time
 
-class updateprogress(commands.Cog):
+
+class UpdateProgress(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -13,7 +14,7 @@ class updateprogress(commands.Cog):
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'r') as file:
             progress = file.read()
         message_str = 'Vivecraft will be updated to Minecraft {0} as soon as possible, citizens.\nThe current progress is: {1}'.format(fifteenium_version, progress)
-        
+
         channel = discord.utils.get(ctx.guild.channels, id = int(os.environ.get('UPDATE_CHANNEL_ID')))
         try:
             with open(os.environ.get('DATA_DIR') + 'updatemsgid.txt', 'r') as file:
@@ -22,7 +23,7 @@ class updateprogress(commands.Cog):
             await message.delete()
         except:
             print("Update message not found")
-        
+
         if fifteenium_version != "null":
             new_message = await channel.send(message_str)
             await new_message.publish()
@@ -34,10 +35,7 @@ class updateprogress(commands.Cog):
     @commands.command()
     @commands.has_role('Developer')
     async def progress(self, ctx, *, arg):
-        '''Sets update progress'''
-        if len(arg) == 0:
-            await ctx.send('You need to provide more arguments, sir.')
-            return
+        """Set update progress"""
         with open(os.environ.get('DATA_DIR') + 'updateprogress.txt', 'w') as file:
             file.write(arg)
         await self.update_message(ctx)
@@ -45,13 +43,10 @@ class updateprogress(commands.Cog):
     @commands.command()
     @commands.has_role('Developer')
     async def update(self, ctx, *, arg):
-        '''Sets update version'''
-        if len(arg) == 0:
-            await ctx.send('You need to provide more arguments, sir.')
-            return
+        """Set update version"""
         with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'w') as file:
             file.write(arg)
         await self.update_message(ctx)
 
 def setup(bot):
-    bot.add_cog(updateprogress(bot))
+    bot.add_cog(UpdateProgress(bot))
