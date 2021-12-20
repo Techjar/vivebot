@@ -2,23 +2,32 @@ from discord.ext import commands
 import time
 import discord
 
-class misc(commands.Cog):
+
+class Miscellaneous(commands.Cog):
+    """Commands with no specific category"""
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def tester(self, ctx):
-        '''Assign/remove tester role'''
-        role = discord.utils.get(ctx.guild.roles, name="Tester")
+        """Assign or remove the tester role from yourself"""
+        role = discord.utils.get(ctx.guild.roles, name='Tester')
         try:
             if role in ctx.author.roles:
                 await ctx.author.remove_roles(role)
-                await ctx.send('Thanks, {}. You are no longer in the tester group.'.format(discord.utils.escape_mentions(ctx.author.name)))
+                await ctx.send(
+                    f'Thanks, {ctx.author.mention}. You are no longer in the tester group.',
+                    allowed_mentions=discord.AllowedMentions.none()
+                )
             else:
                 await ctx.author.add_roles(role)
-                await ctx.send('You are now in the tester group. Welcome aboard, {}.'.format(discord.utils.escape_mentions(ctx.author.name)))
+                await ctx.send(
+                    f'You are now in the tester group. Welcome aboard, {ctx.author.mention}.',
+                    allowed_mentions=discord.AllowedMentions.none()
+                )
         except discord.Forbidden:
             await ctx.send('I am unable to change your role, citizen.')
 
+
 def setup(bot):
-    bot.add_cog(misc(bot))
+    bot.add_cog(Miscellaneous(bot))
