@@ -48,6 +48,7 @@ async def on_ready():
 
 async def init():
     await bot.wait_until_ready()
+    bot.session = aiohttp.ClientSession(loop=bot.loop)
     await update_status()
 
 @bot.event
