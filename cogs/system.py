@@ -10,22 +10,25 @@ class System(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """Show the bot\'s latency"""
-        pingprior = time.monotonic()
-        ping = discord.Embed(title='Pong! :ping_pong:', description='```xl\n<:vive:683522338331033601> Waiting to finish...```')
-        message=await ctx.send(embed=ping)
-        ping=(time.monotonic() - pingprior) * 1000
-        pong = discord.Embed(title='Pong! :ping_pong:', description=f'```xl\n{int(ping)}ms    ```')
-        await message.edit(embed=pong)#content=f"Pong!  `{int(ping)}ms`")
-        print(f'Ping {int(ping)}ms')
+        ping_prior = time.monotonic()
+        message = await ctx.send('*:ping_pong:*')
+        ping = round((time.monotonic() - ping_prior) * 1000, 2)
+        await message.edit(content=f'{int(ping)}ms')
 
     @commands.command()
     async def info(self, ctx):
         """Show info about the bot"""
-        infbed = discord.Embed(title='🖥 Info', description=' ', color=0x96c6fa)
-        infbed.add_field(name='📚 Library', value='`Discord.py`', inline=True)
-        infbed.add_field(name='<:vive:683522338331033601> Version', value='`v0.1`', inline=True)
-        infbed.set_footer(text='Created by shay#0038 (115238234778370049)')
-        await ctx.send(embed=infbed)
+        embed = discord.Embed(
+            title=f'{self.bot.user.name} Info',
+            description=(
+                f'This bot was created on {discord.utils.format_dt(self.bot.user.created_at)} for the Vivecraft Discord server. '
+                'You can find its source on [GitHub](https://github.com/Techjar/vivebot). <:obama:683186013392470031>'
+            ),
+            color=0x82f4f4,
+        )
+        embed.add_field(name='Library', value=f'[discord.py {discord.__version__}](https://github.com/Rapptz/discord.py)')
+        embed.set_footer(text='Ping shay#0038/Techjar#3305 if you have any issues with this bot.')
+        await ctx.send(embed=embed)
 
     @commands.command()
     @commands.has_role('Developer')

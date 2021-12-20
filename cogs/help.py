@@ -14,7 +14,8 @@ class Help(commands.Cog):
         if not item:
             embed = discord.Embed(
                 title=f'{self.bot.user.name} Help Menu',
-                description='\n'.join(f'{cog_name} - {(cog.description or "No description").splitlines()[0]}' for cog_name, cog in self.bot.cogs.items())
+                description='\n'.join(f'{cog_name} - {(cog.description or "No description").splitlines()[0]}' for cog_name, cog in self.bot.cogs.items()),
+                color=0x82f4f4,
             )
 
         elif cog := self.bot.get_cog(item):
@@ -22,13 +23,15 @@ class Help(commands.Cog):
                 title=f'Cog Help',
                 description=(
                     '\n'.join([f'`{command.name}` - {(command.help or "No description").splitlines()[0]}' for command in cog.walk_commands() if not command.parent and (await command.can_run(ctx))])
-                )[:4096]
+                )[:4096],
+                color=0x82f4f4,
             )
 
         elif command := self.bot.get_command(item):
             embed = discord.Embed(
                 title=f'Command Help',
-                description=f'>>> {command.help or "No help text available"}\n\n'
+                description=f'>>> {command.help or "No help text available"}\n\n',
+                color=0x82f4f4,
             )
             if isinstance(command, commands.Group):
                 embed.description += '\n'.join([f'`{subcommand.name}` - {(subcommand.help or "No description").splitlines()[0]}' for subcommand in command.commands if len(subcommand.parents) == 1 and (await subcommand.can_run(ctx))])
