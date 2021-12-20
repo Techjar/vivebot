@@ -5,6 +5,7 @@ import time
 
 
 class UpdateProgress(commands.Cog):
+    """Commands for setting the progress for Vivecraft updates"""
     def __init__(self, bot):
         self.bot = bot
 

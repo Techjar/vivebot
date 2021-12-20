@@ -4,6 +4,7 @@ import sys
 
 
 class ErrorHandler(commands.Cog):
+    """Handler for errors"""
     def __init__(self, bot):
         self.bot = bot
 

@@ -4,6 +4,7 @@ import discord
 
 
 class Miscellaneous(commands.Cog):
+    """Commands with no specific category"""
     def __init__(self, bot):
         self.bot = bot
 

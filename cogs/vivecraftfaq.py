@@ -7,6 +7,7 @@ import re
 
 
 class FAQ(commands.Cog):
+    """Commands that link to the Vivecraft website"""
     def __init__(self, bot):
         self.bot = bot
 

@@ -4,6 +4,7 @@ import time
 
 
 class System(commands.Cog):
+    """General-purpose commands"""
     def __init__(self, bot):
         self.bot = bot
 
