@@ -28,7 +28,7 @@ class ErrorHandler(commands.Cog):
             await ctx.send(f'You are missing the following permissions: **{missing}**')
 
         elif isinstance(error, commands.MissingRole):
-            await ctx.send(f'You need the following role: **{error.missing_role}**')
+            await ctx.send(f'You need the **{error.missing_role}** role.')
 
         elif isinstance(error, commands.MissingAnyRole):
             await ctx.send(f'You need one of the following roles: **{"**, **".join(error.missing_roles)}**')
