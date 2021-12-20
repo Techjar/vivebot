@@ -20,6 +20,7 @@ bot.load_extension('cogs.vivecraftfaq')
 bot.load_extension('cogs.system')
 bot.load_extension('cogs.updateprogress')
 bot.load_extension('cogs.misc')
+bot.load_extension('cogs.errors')
 
 update_cooldown = 0
 spam_timer = {}

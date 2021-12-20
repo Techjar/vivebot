@@ -4,8 +4,6 @@ from bs4.element import NavigableString
 from discord.ext import commands
 import discord
 import re
-import sys
-import traceback
 
 
 class FAQ(commands.Cog):
@@ -133,68 +131,59 @@ class FAQ(commands.Cog):
             embed.add_field(name='Troubleshooting', value='http://www.vivecraft.org/faq/#troubleshooting', inline=True)
             embed.set_footer(text='Ping shay#0038/Techjar#3305 if you have any issues with this bot.')
             await ctx.send(embed=embed)
-        else:
-            async with ctx.typing():
-                try:
-                    found = await self.find_faq_entry(query)
-                    if not found['id']:
-                        await ctx.send('Nothing found.')
-                        return
+            return
 
-                    embed = discord.Embed(
-                        description=found['description'],
-                        color=0x82f4f4
-                    )
-                    embed.set_author(
-                        name=f'FAQ - {found["title"]}',
-                        url=f'http://www.vivecraft.org/faq/#{found["id"]}',
-                        icon_url='https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png',
-                    )
-                    embed.add_field(
-                        name='For more questions see the full FAQ',
-                        value='http://www.vivecraft.org/faq/',
-                        inline=True
-                    )
-                    if found['image_url']:
-                        embed.set_image(url=found['image_url'])
+        async with ctx.typing():
+            found = await self.find_faq_entry(query)
+            if not found['id']:
+                await ctx.send('Nothing found.')
+                return
 
-                    await ctx.send(embed=embed, reference=ctx.message.reference)
-                    if ctx.message.reference:
-                        await ctx.message.delete()
-                except:
-                    traceback.print_exc()
-                    embed = discord.Embed(title='An error occurred', description='Please report this to @Techjar#3305', color=0xff0000)
-                    await ctx.send(embed=embed)
+            embed = discord.Embed(
+                description=found['description'],
+                color=0x82f4f4
+            )
+            embed.set_author(
+                name=f'FAQ - {found["title"]}',
+                url=f'http://www.vivecraft.org/faq/#{found["id"]}',
+                icon_url='https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png',
+            )
+            embed.add_field(
+                name='For more questions see the full FAQ',
+                value='http://www.vivecraft.org/faq/',
+                inline=True
+            )
+            if found['image_url']:
+                embed.set_image(url=found['image_url'])
+
+            await ctx.send(embed=embed, reference=ctx.message.reference)
+            if ctx.message.reference:
+                await ctx.message.delete()
 
     @commands.command(aliases=['download', 'dl'])
     async def downloads(self, ctx):
         """Show Vivecraft download links"""
-        try:
-            found = await self.find_download_links()
-            embed = discord.Embed(
-                description='Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.',
-                color=0x5e9d34
-            )
-            embed.set_author(
-                name='Downloads',
-                url='http://www.vivecraft.org/downloads/',
-                icon_url='https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png',
-            )
-            for version in found['versions']:
-                field_desc = f'[VR & Non-VR Client]({version["client_url"]})'
-                if 'spigot_url' in version:
-                    field_desc += f'\n[Spigot Server Plugin]({version["spigot_url"]})'
-                if 'forge_url' in version:
-                    field_desc += f'\n[Forge Server Mod]({version["forge_url"]})'
-                embed.add_field(name=version['name'], value=field_desc)
+        found = await self.find_download_links()
+        embed = discord.Embed(
+            description='Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.',
+            color=0x5e9d34
+        )
+        embed.set_author(
+            name='Downloads',
+            url='http://www.vivecraft.org/downloads/',
+            icon_url='https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png',
+        )
+        for version in found['versions']:
+            field_desc = f'[VR & Non-VR Client]({version["client_url"]})'
+            if 'spigot_url' in version:
+                field_desc += f'\n[Spigot Server Plugin]({version["spigot_url"]})'
+            if 'forge_url' in version:
+                field_desc += f'\n[Forge Server Mod]({version["forge_url"]})'
+            embed.add_field(name=version['name'], value=field_desc)
 
-            await ctx.send(embed=embed, reference=ctx.message.reference)
-            if ctx.message.reference is not None:
-                await ctx.message.delete()
-        except:
-            traceback.print_exc()
-            embed = discord.Embed(title='An error occurred', description='Please report this to @Techjar#3305', color=0xff0000)
-            await ctx.send(embed=embed)
+        await ctx.send(embed=embed, reference=ctx.message.reference)
+        if ctx.message.reference is not None:
+            await ctx.message.delete()
 
     @commands.command()
     async def forum(self, ctx):
