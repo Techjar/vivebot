@@ -6,6 +6,9 @@ import time
 from datetime import date
 import os
 import asyncio
+from aiohttp_requests import requests
+import json
+import traceback
 
 prefix = "?"
 bot = commands.Bot(command_prefix=prefix)
@@ -20,6 +23,10 @@ bot.load_extension("cogs.misc")
 update_cooldown = 0
 spam_timer = {}
 
+spam_domains = []
+spam_domains_url = "https://api.hyperphish.com/gimme-domains"
+spam_domains_last_update = 0
+
 def is_birthday():
   today = date.today()
   return today >= date(today.year, 8, 4) and today < date(today.year, 8, 11)
@@ -32,11 +39,23 @@ async def update_status():
       await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Masses"))
     await asyncio.sleep(60)
 
+async def update_spam_domains():
+    global spam_domains
+    global spam_domains_last_update
+    if time.time() - spam_domains_last_update >= 1800:
+        try:
+            response = await requests.get(spam_domains_url, timeout=5)
+            spam_domains = json.loads(await response.text())
+            spam_domains_last_update = time.time()
+        except:
+            traceback.print_exc()
+
 @bot.event
 async def on_ready(): #we out here starting
     print(bot.user.name)
     print(bot.user.id)
     print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
+    await update_spam_domains()
     await update_status()
 
 @bot.event
@@ -72,34 +91,46 @@ async def on_message(message):
         await message.reply('Vivecraft will be updated to Minecraft {0} as soon as possible, citizen.\nThe current progress is: {1}\nI\'m a busy man, so you can read the most up-to-date progress at any time in {2}.'.format(fifteenium_version, progress, update_channel.mention))
         print('They triggered the progress query')
 
+    await update_spam_domains()
+
     dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
     if not dev_role in message.author.roles:
+        matched = False
+        matched_words = ""
         with open(os.environ.get('DATA_DIR') + 'filters.txt', 'r') as file:
             for line in file.read().splitlines():
                 words = line.split()
                 if words:
                     matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in words)
                     if matched:
-                        print('Spam detected! Matcher was: ' + line)
-                        if message.author.id in spam_timer:
-                            timer = spam_timer[message.author.id]
-                            if time.time() - timer['time'] < 30:
-                                timer['count'] += 1
-                            else:
-                                timer['count'] = 1
-                            if timer['count'] >= 2:
-                                jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
-                                muted_role = discord.utils.get(message.guild.roles, name="Muted")
-                                if muted_role not in message.author.roles:
-                                    await message.author.add_roles(muted_role)
-                                    await jail_channel.send('{0} was muted for sending spam. Matched words: `{1}`'.format(message.author.mention, line))
-                                    await message.author.send('You were muted for sending spam. This is likely due to your account being compromised. Once you\'ve recovered your account, message one of the developers/admins to be unmuted.')
-                                    print('Muted them for sending too much spam!')
-                            timer['time'] = time.time()
-                        else:
-                            spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
-                        await message.delete()
+                        matched_words = line
                         break
+        if not matched:
+            for domain in spam_domains:
+                matched = re.search(domain, message.content, re.IGNORECASE)
+                if matched:
+                    matched_words = domain
+                    break
+        if matched:
+            print('Spam detected! Matcher was: ' + matched_words)
+            if message.author.id in spam_timer:
+                timer = spam_timer[message.author.id]
+                if time.time() - timer['time'] < 30:
+                    timer['count'] += 1
+                else:
+                    timer['count'] = 1
+                if timer['count'] >= 2:
+                    jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
+                    muted_role = discord.utils.get(message.guild.roles, name="Muted")
+                    if muted_role not in message.author.roles:
+                        await message.author.add_roles(muted_role)
+                        await jail_channel.send('{0} was muted for sending spam. Matched words: `{1}`'.format(message.author.mention, matched_words))
+                        await message.author.send('You were muted for sending spam. This is likely due to your account being compromised. Once you\'ve recovered your account, or if this in error, please message one of the developers/admins to be unmuted.')
+                        print('Muted them for sending too much spam!')
+                timer['time'] = time.time()
+            else:
+                spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
+            await message.delete()
                         
                 
 
