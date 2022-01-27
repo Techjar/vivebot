@@ -125,7 +125,10 @@ async def on_message(message):
                     if muted_role not in message.author.roles:
                         await message.author.add_roles(muted_role)
                         await jail_channel.send('{0} was muted for sending spam. Matched words: `{1}`'.format(message.author.mention, matched_words))
-                        await message.author.send('You were muted for sending spam. This is likely due to your account being compromised. Once you\'ve recovered your account, or if this in error, please message one of the developers/admins to be unmuted.')
+                        try:
+                            await message.author.send('You were muted for sending spam. This is likely due to your account being compromised. Once you\'ve recovered your account, or if this in error, please message one of the developers/admins to be unmuted.')
+                        except:
+                            pass
                         print('Muted them for sending too much spam!')
                 timer['time'] = time.time()
             else:
