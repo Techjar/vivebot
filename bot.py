@@ -79,6 +79,19 @@ async def on_message(message):
           await message.channel.send(random.choice(birthdaysponce))
           print('They triggered birthdayium')
 
+    if message.channel.id == 890473145801277441:
+        try:
+            with open(os.environ.get('DATA_DIR') + 'serveradrulesmsgid.txt', 'r') as file:
+                msg_id = int(file.read())
+            old_message = await message.channel.fetch_message(msg_id)
+            await old_message.delete()
+        except:
+            pass
+        
+        new_message = await message.channel.send("If you're posting a server ad, be sure to read the rules in this channel's pins! 📌\nThe important parts are highlighted in bold.")
+        with open(os.environ.get('DATA_DIR') + 'serveradrulesmsgid.txt', 'w') as file:
+            file.write(str(new_message.id))
+
     global update_cooldown
     with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
         fifteenium_version = file.read()
