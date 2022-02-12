@@ -120,7 +120,7 @@ async def on_message(message):
                         break
         if not matched:
             for domain in spam_domains:
-                domain_link = domain + '/'
+                domain_link = 'https?://' + domain.replace('.', '\\.') + '/'
                 matched = re.search(domain_link, message.content, re.IGNORECASE)
                 if matched:
                     matched_words = domain_link
