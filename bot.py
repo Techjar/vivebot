@@ -120,9 +120,10 @@ async def on_message(message):
                         break
         if not matched:
             for domain in spam_domains:
-                matched = re.search(domain, message.content, re.IGNORECASE)
+                domain_link = domain + '/'
+                matched = re.search(domain_link, message.content, re.IGNORECASE)
                 if matched:
-                    matched_words = domain
+                    matched_words = domain_link
                     break
         if matched:
             print('Spam detected! Matcher was: ' + matched_words)
