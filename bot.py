@@ -17,12 +17,6 @@ intents.message_content = True
 intents.reactions = True
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
-#these cogs really just exist so that i dont have to cram it all in the main file.
-await bot.load_extension("cogs.help") #take a guess
-await bot.load_extension("cogs.vivecraftfaq")
-await bot.load_extension("cogs.system")
-await bot.load_extension("cogs.updateprogress")
-await bot.load_extension("cogs.misc")
 
 update_cooldown = 0
 spam_timer = {}
@@ -56,9 +50,17 @@ async def update_spam_domains():
 
 @bot.event
 async def on_ready(): #we out here starting
+    #these cogs really just exist so that i dont have to cram it all in the main file.
+    await bot.load_extension("cogs.help") #take a guess
+    await bot.load_extension("cogs.vivecraftfaq")
+    await bot.load_extension("cogs.system")
+    await bot.load_extension("cogs.updateprogress")
+    await bot.load_extension("cogs.misc")
+    
     print(bot.user.name)
     print(bot.user.id)
     print("For the ViveCraft discord server\nCreated by shay#0038 (115238234778370049)")
+    
     await update_spam_domains()
     await update_status()
 
