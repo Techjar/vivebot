@@ -179,4 +179,4 @@ class faq(commands.Cog, name='FAQ'):
         await ctx.send(embed=embed)
 
 async def setup(bot):
-    bot.add_cog(faq(bot))
+    await bot.add_cog(faq(bot))

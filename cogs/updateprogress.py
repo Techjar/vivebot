@@ -54,4 +54,4 @@ class updateprogress(commands.Cog):
         await self.update_message(ctx)
 
 async def setup(bot):
-    bot.add_cog(updateprogress(bot))
+    await bot.add_cog(updateprogress(bot))

@@ -21,4 +21,4 @@ class misc(commands.Cog):
             await ctx.send('I am unable to change your role, citizen.')
 
 async def setup(bot):
-    bot.add_cog(misc(bot))
+    await bot.add_cog(misc(bot))
