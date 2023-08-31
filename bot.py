@@ -11,7 +11,11 @@ import json
 import traceback
 
 prefix = "?"
-bot = commands.Bot(command_prefix=prefix)
+intents = discord.Intents.default()
+intents.messages = True
+intents.message_content = True
+intents.reactions = True
+bot = commands.Bot(command_prefix=prefix, intents=intents)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
 #these cogs really just exist so that i dont have to cram it all in the main file.
 bot.load_extension("cogs.help") #take a guess
