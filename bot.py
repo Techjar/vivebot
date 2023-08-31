@@ -18,11 +18,11 @@ intents.reactions = True
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
 #these cogs really just exist so that i dont have to cram it all in the main file.
-bot.load_extension("cogs.help") #take a guess
-bot.load_extension("cogs.vivecraftfaq")
-bot.load_extension("cogs.system")
-bot.load_extension("cogs.updateprogress")
-bot.load_extension("cogs.misc")
+await bot.load_extension("cogs.help") #take a guess
+await bot.load_extension("cogs.vivecraftfaq")
+await bot.load_extension("cogs.system")
+await bot.load_extension("cogs.updateprogress")
+await bot.load_extension("cogs.misc")
 
 update_cooldown = 0
 spam_timer = {}
