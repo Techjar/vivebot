@@ -140,8 +140,11 @@ class faq(commands.Cog, name='FAQ'):
             
             modrinth_ver = "0.0.0"
             for ent in modrinth_data:
-                if version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
-                    modrinth_ver = ent['game_versions'][-1]
+                try:
+                    if version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
+                        modrinth_ver = ent['game_versions'][-1]
+                except version.InvalidVersion:
+                    pass
             
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
