@@ -174,7 +174,7 @@ else:
     token = os.environ.get('BOT_TOKEN')
 
 async def main():
-    async with client:
+    async with bot:
         await load_extensions()
         await bot.start(token)
 
