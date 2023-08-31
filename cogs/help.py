@@ -41,5 +41,5 @@ class help(commands.Cog):
         except:
             pass
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(help(bot))

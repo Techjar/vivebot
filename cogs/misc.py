@@ -20,5 +20,5 @@ class misc(commands.Cog):
         except discord.Forbidden:
             await ctx.send('I am unable to change your role, citizen.')
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(misc(bot))

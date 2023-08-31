@@ -53,5 +53,5 @@ class updateprogress(commands.Cog):
             file.write(arg)
         await self.update_message(ctx)
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(updateprogress(bot))

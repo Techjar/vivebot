@@ -54,5 +54,5 @@ class system(commands.Cog):
                     await ctx.send('<:vive:683522338331033601> Shutting down.')
                     await ctx.bot.close()"""
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(system(bot))

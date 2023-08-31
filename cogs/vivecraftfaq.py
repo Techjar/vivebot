@@ -178,5 +178,5 @@ class faq(commands.Cog, name='FAQ'):
         embed.set_footer(text="ping @shay#0038 or @Techjar#3305 if you have any issues!")
         await ctx.send(embed=embed)
 
-def setup(bot):
+async def setup(bot):
     bot.add_cog(faq(bot))
