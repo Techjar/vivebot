@@ -134,15 +134,19 @@ class faq(commands.Cog, name='FAQ'):
             find_urls(4, 'spigot_url')
             find_urls(5, 'forge_url')
             
+            response = await requests.get("https://api.modrinth.com/v2/project/vivecraft/version?loaders=[%22fabric%22]", timeout=5)
+            modrinth_data = await response.json()
+            
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+            embed.add_field(name=modrinth_data[0]['game_versions'][-1] + " Mod", value="[Modrinth](https://modrinth.com/mod/vivecraft)\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/vivecraft)", inline=True)
             for ver in versions:
                 field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
                 if 'spigot_url' in ver:
                     field_desc += "\n[Spigot Server Plugin](" + ver['spigot_url'] + ")"
                 if 'forge_url' in ver:
                     field_desc += "\n[Forge Server Mod](" + ver['forge_url'] + ")"
-                embed.add_field(name=ver['name'], value=field_desc, inline=True)
+                embed.add_field(name=ver['name'] + " Standalone", value=field_desc, inline=True)
             if ctx.message.reference is not None:
                 await ctx.send(embed=embed, reference=ctx.message.reference)
                 await ctx.message.delete()
