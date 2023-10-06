@@ -17,7 +17,7 @@ class faq(commands.Cog, name='FAQ'):
         '''Displays jumpable buttons to the FAQ or a specific entry from the FAQ'''
         if len(args) == 0:
             embed = discord.Embed(title=" ", color=0x82f4f4)
-            embed.set_author(name="FAQ - Jump To:", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+            embed.set_author(name="FAQ - Jump To:", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
             embed.add_field(name="Gameplay", value="http://www.vivecraft.org/faq/#gameplay", inline=True)
             embed.add_field(name="Compatibility", value="http://www.vivecraft.org/faq/#compatibility", inline=True)
             embed.add_field(name="Troubleshooting", value="http://www.vivecraft.org/faq/#troubleshooting", inline=True)
@@ -93,7 +93,7 @@ class faq(commands.Cog, name='FAQ'):
                     if found:
                         embed = discord.Embed(title="", description=desc, color=0x82f4f4)
                         embed.set_author(name="FAQ - " + title, url="http://www.vivecraft.org/faq/#" + id,
-                                        icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+                                        icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
                         embed.add_field(name="For more questions see the full FAQ", value="http://www.vivecraft.org/faq/", inline=True)
                         if image is not None:
                             embed.set_image(url=image)
@@ -147,7 +147,7 @@ class faq(commands.Cog, name='FAQ'):
                     pass
             
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
-            embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+            embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
             for ver in versions:
                 field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
                 #if 'spigot_url' in ver:
@@ -172,7 +172,7 @@ class faq(commands.Cog, name='FAQ'):
     async def forum(self, ctx):
         '''Link to the forum'''
         embed = discord.Embed(title=" ", color=0x82f4f4)
-        embed.set_author(name="Forum - Jump To:", icon_url="https://media.discordapp.net/attachments/548280483809722369/621835686030475274/vc.png")
+        embed.set_author(name="Forum - Jump To:", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
         embed.add_field(name="Main Page", value="http://www.vivecraft.org/forum/", inline=True)
         embed.add_field(name="General", value="http://www.vivecraft.org/forum/viewforum.php?f=6", inline=True)
         embed.add_field(name="Troubleshooting", value="http://www.vivecraft.org/forum/viewforum.php?f=3", inline=True)
