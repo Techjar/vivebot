@@ -161,9 +161,10 @@ class faq(commands.Cog, name='FAQ'):
             for ver in versions:
                 if 'client_url' not in ver:
                     continue
-                field_desc = "[VR & Non-VR Installer](" + ver['client_url'] + ")"
+                field_desc = ""
                 if ver['name'] in modrinth_urls:
                     field_desc += "\n[Fabric Mod (Modrinth)](" + modrinth_urls[ver['name']]['fabric'] + ")\n[Forge Mod (Modrinth)](" + modrinth_urls[ver['name']]['forge'] + ")"
+                field_desc += "[VR & Non-VR Installer](" + ver['client_url'] + ")"
                 #if 'spigot_url' in ver:
                 #    field_desc += "\n[Spigot Server Plugin](" + ver['spigot_url'] + ")"
                 #if 'forge_url' in ver:
