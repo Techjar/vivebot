@@ -151,20 +151,28 @@ class faq(commands.Cog, name='FAQ'):
                         modrinth_urls[ent['game_versions'][-1]]['fabric'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
                     if 'forge' not in modrinth_urls[ent['game_versions'][-1]] and 'forge' in ent['loaders']:
                         modrinth_urls[ent['game_versions'][-1]]['forge'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
+                    if 'neoforge' not in modrinth_urls[ent['game_versions'][-1]] and 'neoforge' in ent['loaders']:
+                        modrinth_urls[ent['game_versions'][-1]]['neoforge'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
                 except version.InvalidVersion:
                     pass
             
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
-            embed.add_field(name=modrinth_ver + " (Latest)", value="[Fabric Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['fabric'] + ")\n[Forge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['forge'] + ")\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/vivecraft)", inline=True)
+            embed.add_field(name=modrinth_ver + " (Latest)", value="[Fabric Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['fabric'] + ")\n[Forge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['forge'] + ")\n[NeoForge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['neoforge'] + ")\n[All Mods (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/vivecraft/files?version=" + modrinth_ver + ")", inline=True)
             field_count = 2
             for ver in versions:
                 if 'client_url' not in ver:
                     continue
                 field_desc = ""
                 if ver['name'] in modrinth_urls:
-                    field_desc += "[Fabric Mod (Modrinth)](" + modrinth_urls[ver['name']]['fabric'] + ")\n[Forge Mod (Modrinth)](" + modrinth_urls[ver['name']]['forge'] + ")"
-                field_desc += "\n[VR & Non-VR Installer](" + ver['client_url'] + ")"
+                    if 'fabric' in modrinth_urls[ver['name']]:
+                        field_desc += "[Fabric Mod (Modrinth)](" + modrinth_urls[ver['name']]['fabric'] + ")\n"
+                    if 'forge' in modrinth_urls[ver['name']]:
+                        field_desc += "[Forge Mod (Modrinth)](" + modrinth_urls[ver['name']]['forge'] + ")\n"
+                    if 'neoforge' in modrinth_urls[ver['name']]:
+                        field_desc += "[NeoForge Mod (Modrinth)](" + modrinth_urls[ver['name']]['neoforge'] + ")\n"
+                    field_desc += "[All Mods (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/vivecraft/files?version=" + ver['name'] + ")\n"
+                field_desc += "[VR & Non-VR Installer](" + ver['client_url'] + ")"
                 #if 'spigot_url' in ver:
                 #    field_desc += "\n[Spigot Server Plugin](" + ver['spigot_url'] + ")"
                 #if 'forge_url' in ver:
