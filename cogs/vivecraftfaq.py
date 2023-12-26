@@ -162,9 +162,8 @@ class faq(commands.Cog, name='FAQ'):
                 field_count = field_count + 1
             embed.add_field(name="Server Plugins", value="[Spigot Server Plugin](https://github.com/jrbudda/Vivecraft_Spigot_Extensions/releases)\n[Forge Server Mod](https://www.curseforge.com/minecraft/mc-mods/vivecraft-forge-extensions/files)", inline=True)
             
-            if field_count % 3 != 0:
-                for n in range(3 - field_count % 3):
-                    embed.add_field(name="", value="", inline=True)
+            for n in range(3 - field_count % 3):
+                embed.add_field(name="", value="", inline=True)
             
             if ctx.message.reference is not None:
                 await ctx.send(embed=embed, reference=ctx.message.reference)
