@@ -139,14 +139,14 @@ class faq(commands.Cog, name='FAQ'):
             modrinth_data = await response.json()
             
             modrinth_ver = "0.0.0"
-            modrinth_urls = []
+            modrinth_urls = {}
             for ent in modrinth_data:
                 try:
                     if 'fabric' in ent['loaders'] and version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
                         modrinth_ver = ent['game_versions'][-1]
                     
                     if ent['game_versions'][-1] not in modrinth_urls:
-                        modrinth_urls[ent['game_versions'][-1]] = []
+                        modrinth_urls[ent['game_versions'][-1]] = {}
                     if 'fabric' not in modrinth_urls[ent['game_versions'][-1]] and 'fabric' in ent['loaders']:
                         modrinth_urls[ent['game_versions'][-1]]['fabric'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
                     if 'forge' not in modrinth_urls[ent['game_versions'][-1]] and 'forge' in ent['loaders']:
