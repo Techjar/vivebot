@@ -149,6 +149,7 @@ class faq(commands.Cog, name='FAQ'):
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
             embed.add_field(name=modrinth_ver + " Mod", value="[Modrinth](https://modrinth.com/mod/vivecraft)\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/vivecraft)", inline=True)
+            field_count = 0
             for ver in versions:
                 if 'client_url' not in ver:
                     continue
@@ -158,7 +159,12 @@ class faq(commands.Cog, name='FAQ'):
                 #if 'forge_url' in ver:
                 #    field_desc += "\n[Forge Server Mod](" + ver['forge_url'] + ")"
                 embed.add_field(name=ver['name'] + " Standalone", value=field_desc, inline=True)
+                field_count = field_count + 1
             embed.add_field(name="Server Plugins", value="[Spigot Server Plugin](https://github.com/jrbudda/Vivecraft_Spigot_Extensions/releases)\n[Forge Server Mod](https://www.curseforge.com/minecraft/mc-mods/vivecraft-forge-extensions/files)", inline=True)
+            
+            if (field_count - 1) % 3 != 0:
+                for n in range(3 - (field_count - 1) % 3):
+                    embed.add_field(name="", value="", inline=True)
             
             if ctx.message.reference is not None:
                 await ctx.send(embed=embed, reference=ctx.message.reference)
