@@ -51,7 +51,7 @@ async def update_spam_domains():
     if time.time() - spam_domains_last_update >= 1800:
         try:
             response = await requests.get(spam_domains_url, timeout=5)
-            spam_domains = json.loads(await response.text())
+            spam_domains = await response.readlines()
             spam_domains_last_update = time.time()
         except:
             traceback.print_exc()
