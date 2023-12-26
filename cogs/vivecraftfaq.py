@@ -135,25 +135,35 @@ class faq(commands.Cog, name='FAQ'):
             #find_urls(4, 'spigot_url')
             #find_urls(5, 'forge_url')
             
-            response = await requests.get("https://api.modrinth.com/v2/project/vivecraft/version?loaders=[%22fabric%22]", timeout=5)
+            response = await requests.get("https://api.modrinth.com/v2/project/vivecraft/version", timeout=5)
             modrinth_data = await response.json()
             
             modrinth_ver = "0.0.0"
+            modrinth_urls = []
             for ent in modrinth_data:
                 try:
-                    if version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
+                    if 'fabric' in ent['loaders'] and version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
                         modrinth_ver = ent['game_versions'][-1]
+                    
+                    if ent['game_versions'][-1] not in modrinth_urls:
+                        modrinth_urls[ent['game_versions'][-1]] = []
+                    if 'fabric' not in modrinth_urls[ent['game_versions'][-1]] and 'fabric' in ent['loaders']:
+                        modrinth_urls[ent['game_versions'][-1]]['fabric'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
+                    if 'forge' not in modrinth_urls[ent['game_versions'][-1]] and 'forge' in ent['loaders']:
+                        modrinth_urls[ent['game_versions'][-1]]['forge'] = "https://modrinth.com/mod/vivecraft/version/" + ent["version_number"]
                 except version.InvalidVersion:
                     pass
             
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
-            embed.add_field(name=modrinth_ver + " Mod", value="[Modrinth](https://modrinth.com/mod/vivecraft)\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/vivecraft)", inline=True)
+            embed.add_field(name=modrinth_ver + " Mod", value="[Modrinth (Fabric)](" + modrinth_urls[modrinth_ver]['fabric'] + ")\n[Modrinth (Forge)](" + modrinth_urls[modrinth_ver]['forge'] + ")\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/vivecraft)", inline=True)
             field_count = 2
             for ver in versions:
                 if 'client_url' not in ver:
                     continue
                 field_desc = "[VR & Non-VR Client](" + ver['client_url'] + ")"
+                if ver['name'] in modrinth_urls:
+                    field_desc += "\n[Fabric Mod](" + modrinth_urls[ver['name']]['fabric'] + ")\n[Forge Mod](" + modrinth_urls[ver['name']]['forge'] + ")"
                 #if 'spigot_url' in ver:
                 #    field_desc += "\n[Spigot Server Plugin](" + ver['spigot_url'] + ")"
                 #if 'forge_url' in ver:
