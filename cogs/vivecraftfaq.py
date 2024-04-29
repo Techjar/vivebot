@@ -139,11 +139,13 @@ class faq(commands.Cog, name='FAQ'):
             modrinth_data = await response.json()
             
             modrinth_ver = "0.0.0"
+            modrinth_type = "release"
             modrinth_urls = {}
             for ent in modrinth_data:
                 try:
                     if 'fabric' in ent['loaders'] and version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
                         modrinth_ver = ent['game_versions'][-1]
+                        modrinth_type = ent['release_type']
                     
                     if ent['game_versions'][-1] not in modrinth_urls:
                         modrinth_urls[ent['game_versions'][-1]] = {}
@@ -158,7 +160,23 @@ class faq(commands.Cog, name='FAQ'):
             
             embed = discord.Embed(title="", description="Installation instructions can be found at [vivecraft.org/downloads](http://www.vivecraft.org/downloads/). All download links can also be found there, including discontinued legacy versions.", color=0x5e9d34)
             embed.set_author(name="Downloads", url="http://www.vivecraft.org/downloads/", icon_url="https://qimg.techjargaming.com/i/mO6n11gT/vc.png")
-            embed.add_field(name=modrinth_ver + " (Latest)", value="[Fabric Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['fabric'] + ")\n[Forge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['forge'] + ")\n[NeoForge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['neoforge'] + ")\n[All Mods (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/vivecraft/files?version=" + modrinth_ver + ")", inline=True)
+            
+            latest_links = ""
+            if 'fabric' in modrinth_urls[modrinth_ver]:
+                latest_links += "[Fabric Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['fabric'] + ")\n"
+            if 'forge' in modrinth_urls[modrinth_ver]:
+                latest_links += "[Forge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['forge'] + ")\n"
+            if 'neoforge' in modrinth_urls[modrinth_ver]:
+                latest_links += "[NeoForge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['neoforge'] + ")\n"
+            latest_links += "[All Mods (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/vivecraft/files?version=" + modrinth_ver + ")"
+            if modrinth_type == "alpha":
+                latest_type += "Latest Alpha"
+            elif modrinth_type == "beta":
+                latest_type += "Latest Beta"
+            else:
+                latest_type += "Latest"
+            embed.add_field(name=modrinth_ver + " (" + latest_type + ")", value=latest_links, inline=True)
+            
             field_count = 2
             for ver in versions:
                 if 'client_url' not in ver:
