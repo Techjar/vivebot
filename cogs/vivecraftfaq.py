@@ -145,7 +145,7 @@ class faq(commands.Cog, name='FAQ'):
                 try:
                     if 'fabric' in ent['loaders'] and version.parse(ent['game_versions'][-1]) > version.parse(modrinth_ver):
                         modrinth_ver = ent['game_versions'][-1]
-                        modrinth_type = ent['release_type']
+                        modrinth_type = ent['version_type']
                     
                     if ent['game_versions'][-1] not in modrinth_urls:
                         modrinth_urls[ent['game_versions'][-1]] = {}
