@@ -170,11 +170,11 @@ class faq(commands.Cog, name='FAQ'):
                 latest_links += "[NeoForge Mod (Modrinth)](" + modrinth_urls[modrinth_ver]['neoforge'] + ")\n"
             latest_links += "[All Mods (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/vivecraft/files?version=" + modrinth_ver + ")"
             if modrinth_type == "alpha":
-                latest_type += "Latest Alpha"
+                latest_type = "Latest Alpha"
             elif modrinth_type == "beta":
-                latest_type += "Latest Beta"
+                latest_type = "Latest Beta"
             else:
-                latest_type += "Latest"
+                latest_type = "Latest"
             embed.add_field(name=modrinth_ver + " (" + latest_type + ")", value=latest_links, inline=True)
             
             field_count = 2
