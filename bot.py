@@ -118,21 +118,21 @@ async def on_message(message):
     if not dev_role in message.author.roles:
         matched = False
         matched_words = ""
-        with open(os.environ.get('DATA_DIR') + 'filters.txt', 'r') as file:
-            for line in file.read().splitlines():
-                words = line.split()
-                if words:
-                    matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in words)
-                    if matched:
-                        matched_words = line
-                        break
+        for domain in spam_domains:
+            domain_link = 'https?://' + domain.replace('.', '\\.') + '/'
+            matched = re.search(domain_link, message.content, re.IGNORECASE)
+            if matched:
+                matched_words = domain_link
+                break
         if not matched:
-            for domain in spam_domains:
-                domain_link = 'https?://' + domain.replace('.', '\\.') + '/'
-                matched = re.search(domain_link, message.content, re.IGNORECASE)
-                if matched:
-                    matched_words = domain_link
-                    break
+            with open(os.environ.get('DATA_DIR') + 'filters.txt', 'r') as file:
+                for line in file.read().splitlines():
+                    words = line.split()
+                    if words:
+                        matched = all(re.search(flt, message.content, re.IGNORECASE) for flt in words)
+                        if matched:
+                            matched_words = line
+                            break
         if matched:
             print('Spam detected! Matcher was: ' + matched_words)
             if message.author.id in spam_timer:
