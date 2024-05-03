@@ -30,7 +30,7 @@ update_cooldown = 0
 spam_timer = {}
 
 spam_domains = []
-spam_domains_url = "https://github.com/Dogino/Discord-Phishing-URLs/raw/main/scam-urls.txt"
+spam_domains_url = "https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/list.txt"
 spam_domains_last_update = 0
 
 def is_birthday():
