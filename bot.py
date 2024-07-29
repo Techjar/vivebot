@@ -3,7 +3,7 @@ import discord
 import re
 import random
 import time
-from datetime import date
+from datetime import date, timedelta
 import os
 import asyncio
 from aiohttp_requests import requests
@@ -30,8 +30,9 @@ update_cooldown = 0
 spam_timer = {}
 
 spam_domains = []
-spam_domains_url = "https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/list.txt"
+spam_domains_urls = ["https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/list.txt", "https://raw.githubusercontent.com/PeterDaveHello/url-shorteners/master/list"]
 spam_domains_last_update = 0
+spam_domains_exclude = ["discord.gg", "dis.gd"]
 
 def is_birthday():
   today = date.today()
@@ -49,13 +50,19 @@ async def update_spam_domains():
     global spam_domains
     global spam_domains_last_update
     if time.time() - spam_domains_last_update >= 1800:
+        new_spam_domains = []
         try:
-            response = await requests.get(spam_domains_url, timeout=5)
-            response_text = await response.text()
-            spam_domains = response_text.splitlines()
-            spam_domains_last_update = time.time()
+            for url in spam_domains_urls:
+                    response = await requests.get(url, timeout=5)
+                    response_text = await response.text()
+                    new_spam_domains += response_text.splitlines()
+            if len(new_spam_domains) > 0:
+                for exclude in spam_domains_exclude:
+                    new_spam_domains.remove(exclude)
+                spam_domains = new_spam_domains
         except:
             traceback.print_exc()
+    spam_domains_last_update = time.time()
 
 @bot.event
 async def on_ready(): #we out here starting
@@ -135,27 +142,24 @@ async def on_message(message):
                             break
         if matched:
             print('Spam detected! Matcher was: ' + matched_words)
-            if message.author.id in spam_timer:
-                timer = spam_timer[message.author.id]
-                if time.time() - timer['time'] < 30:
-                    timer['count'] += 1
-                else:
-                    timer['count'] = 1
-                if timer['count'] >= 2:
-                    jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
-                    muted_role = discord.utils.get(message.guild.roles, name="Muted")
-                    if muted_role not in message.author.roles:
-                        await message.author.add_roles(muted_role)
-                        await jail_channel.send('{0} was muted for sending spam. Matched words: `{1}`'.format(message.author.mention, matched_words))
-                        try:
-                            await message.author.send('You were muted for sending spam. This is likely due to your account being compromised. Once you\'ve recovered your account, or if this in error, please message one of the developers/admins to be unmuted.')
-                        except:
-                            pass
-                        print('Muted them for sending too much spam!')
-                timer['time'] = time.time()
-            else:
-                spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
+            await message.author.timeout(until=timedelta(seconds=60))
+            
+            if message.author.id not in spam_timer or time.time() - spam_timer[message.author.id]['time'] < 600:
+                jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
+                await jail_channel.send('{0} was timed out for sending spam. Matched words: `{1}`'.format(message.author.mention, matched_words))
+                try:
+                    await message.author.send('You were timed out for sending spam. This is likely due to your account being compromised. If this is in error, please let us know.')
+                except:
+                    pass
             await message.delete()
+            
+            if message.author.id not in spam_timer:
+                spam_timer[message.author.id] = {'count': 1, 'time': time.time()}
+            else:
+                timer = spam_timer[message.author.id]
+                timer['count'] += 1
+                if time.time() - timer['time'] >= 600:
+                    timer['time'] = time.time()
                         
                 
 
