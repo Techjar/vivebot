@@ -13,7 +13,7 @@ import traceback
 prefix = "?"
 intents = discord.Intents.default()
 intents.messages = True
-intents.message_content = True
+#intents.message_content = True
 intents.reactions = True
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 bot.remove_command('help') #removes ?help for the custom one cause i dont like discord.py's default ?help
