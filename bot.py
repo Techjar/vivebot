@@ -107,6 +107,15 @@ async def on_message(message):
         with open(os.environ.get('DATA_DIR') + 'serveradrulesmsgid.txt', 'w') as file:
             file.write(str(new_message.id))
 
+    dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
+    if message.channel.id == 1520569374350508032 and not dev_role:
+        message.author.kick()
+        time_delta = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(minutes=2)
+        for channel in message.guild.text_channels:
+            async for msg in channel.history(after=time_delta, limit=None):
+                if msg.author.id == message.author.id:
+                    msg.delete()
+
     global update_cooldown
     with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
         fifteenium_version = file.read()
@@ -121,7 +130,6 @@ async def on_message(message):
 
     await update_spam_domains()
 
-    dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
     if not dev_role in message.author.roles:
         matched = False
         matched_words = ""
