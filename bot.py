@@ -109,12 +109,14 @@ async def on_message(message):
 
     dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
     if message.channel.id == 1520569374350508032 and not dev_role:
-        message.author.kick()
+        await message.author.kick()
         time_delta = datetime.now(timezone.utc) - timedelta(minutes=2)
         for channel in message.guild.text_channels:
             async for msg in channel.history(after=time_delta, limit=None):
                 if msg.author.id == message.author.id:
-                    msg.delete()
+                    await msg.delete()
+        jail_channel = discord.utils.get(message.guild.channels, id = int(os.environ.get('JAIL_CHANNEL_ID')))
+        await jail_channel.send('{0} was kicked by the honeypot.'.format(message.author.mention))
 
     global update_cooldown
     with open(os.environ.get('DATA_DIR') + 'updateversion.txt', 'r') as file:
