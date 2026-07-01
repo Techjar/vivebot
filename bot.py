@@ -79,7 +79,7 @@ async def on_message(message):
     if message.author.id == 628093260711198733 or message.content.startswith(prefix):
         return
 
-    print('Message received from {0}#{1} ({2})'.format(message.author.name, message.author.discriminator, str(message.author.id)))
+    print('Message received from {0} ({1}) in {2}'.format(message.author.name, str(message.author.id), message.channel.name))
 
     obamasponce = ['You\'re welcome, citizen. <:obama:683186013392470031>', 'All in a day\'s work.', 'My pleasure.', 'No, thank you!'] #he kinda sounds like a cheesy superhero in these, idk how obama would respond to "thanks obama" so im clueless
     obamium = re.compile(r'(?i)(thanks obama|thanks, obama|thank you obama|thank you, obama)')
@@ -108,7 +108,7 @@ async def on_message(message):
             file.write(str(new_message.id))
 
     dev_role = discord.utils.find(lambda r: r.name == 'Developer', message.guild.roles)
-    if message.channel.id == 1520569374350508032 and not dev_role:
+    if message.channel.id == 1520569374350508032 and not dev_role in message.author.roles:
         await message.author.kick()
         time_delta = datetime.now(timezone.utc) - timedelta(minutes=2)
         for channel in message.guild.text_channels:
